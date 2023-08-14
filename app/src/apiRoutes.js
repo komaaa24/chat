@@ -11,6 +11,10 @@ const path = require("path");
 const log = new Logs("server");
 // const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
 
+router.get("/stream", (req, res, next) => {
+  res.sendFile("../../public/stream.html");
+});
+
 router.get("/video", (req, res, next) => {
   const range = req.headers.range;
   if (!range) {
