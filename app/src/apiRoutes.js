@@ -4,15 +4,16 @@ const express = require("express");
 const Logs = require("./logs");
 const router = express.Router();
 const config = require("./config");
-const { canJoin, findFreePeer } = require("./utils");
+const { canJoin, findFreePeer, getMeetingURL } = require("./utils");
 const fs = require("fs");
 const path = require("path");
+const { peers, sockets } = require("./socketIOService");
 
 const log = new Logs("server");
 // const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
 
 router.get("/stream", (req, res, next) => {
-  res.sendFile("../../public/stream.html");
+  res.sendFile(config.views.stream);
 });
 
 router.get("/video", (req, res, next) => {
@@ -21,7 +22,7 @@ router.get("/video", (req, res, next) => {
     res.status(400).send("Requires Range header");
     return;
   }
-  const videoPath = "../../public/videos/video1.mp4";
+  const videoPath = path.resolve(__dirname, "../../video1.mp4");
   const videoSize = fs.statSync(videoPath).size;
 
   const CHUNK_SIZE = 10 ** 6; // 1M
@@ -61,13 +62,12 @@ router.get("/privacy", (req, res, next) => {
 });
 
 router.get("/api/freepeers", (req, res, next) => {
-  console.log("ishlayabdi");
-  let freePeer = findFreePeer(peers);
+  let freePeer = findFreePeer(config.peers);
   res.send(JSON.stringify({ freePeer: freePeer }));
 });
 
 router.get("/api/groupspeer", (req, res) => {
-  let users = Object.keys(sockets).length;
+  let users = Object.keys(config.sockets).length;
   res.send(JSON.stringify({ users: users }));
 });
 
@@ -83,6 +83,30 @@ router.get("/join", (req, res, next) => {
 // Join Room *
 router.get("/join/*", (req, res, next) => {
   res.sendFile(config.views.client);
+});
+
+router.post("/api/v1", (req, res, next) => {
+  // check if user was authorized for the api call
+  let authorization = req.headers.authorization;
+  if (authorization != api_key_secret) {
+    log.debug("Videochat get meeting - Unauthorized", {
+      header: req.headers,
+      body: req.body,
+    });
+    return res.status(403).json({ error: "Unauthorized!" });
+  }
+  // setup meeting URL
+  let host = req.headers.host;
+  let meetingURL = getMeetingURL(host);
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify({ meeting: meetingURL }));
+
+  // log.debug the output if all done
+  log.debug("Videochat get meeting - Authorized", {
+    header: req.headers,
+    body: req.body,
+    meeting: meetingURL,
+  });
 });
 
 module.exports = router;

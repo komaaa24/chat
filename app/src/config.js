@@ -1,6 +1,9 @@
 const path = require("path");
 
 module.exports = {
+  channels: {}, // collect channels
+  sockets: {}, // collect sockets
+  peers: {},
   views: {
     client: path.join(__dirname, "../../", "public/views/client.html"),
     landing: path.join(__dirname, "../../", "public/views/landing.html"),
@@ -10,11 +13,7 @@ module.exports = {
     privacy: path.join(__dirname, "../../", "public/views/privacy.html"),
     stunTurn: path.join(__dirname, "../../", "public/views/testStunTurn.html"),
     teststream: path.join(__dirname, "../../", "public/views/teststream.html"),
-    videoStream: path.join(
-      __dirname,
-      "../../",
-      "public/views/videoStream.html"
-    ),
+    stream: path.join(__dirname, "../../", "public/views/stream.html"),
   },
   dir: {
     public: path.join(__dirname, "../../", "public"),
