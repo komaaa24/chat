@@ -16,6 +16,7 @@ const checkConnection = require("./canaryTest");
 const SocketIOService = require("./socketIOService");
 const User = require("./models/user.model");
 
+
 const isHttps = false; // must be the same on client.js
 const port = process.env.PORT || 3000; // must be the same to client.js signalingServerPort
 
@@ -111,9 +112,6 @@ app.use("/", require("./apiRoutes"));
 app.get("*", (req, res, next) => {
   res.sendFile(config.views.notFound);
 });
-
-// end of Videochat API v1
-// not match any of page before, so 404 not found
 
 /**
  * You should probably use a different stun-turn server
