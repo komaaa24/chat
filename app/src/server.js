@@ -11,7 +11,7 @@ const app = express();
 const ffmpeg = require("ffmpeg");
 const Logs = require("./logs");
 const log = new Logs("server");
-const { errorHandler, makeHttps } = require("./utils");
+const { errorHandler, makeHttps, connectMongoDb } = require("./utils");
 const checkConnection = require("./canaryTest");
 const SocketIOService = require("./socketIOService");
 
@@ -89,6 +89,11 @@ app.use(
 ); // api docs
 
 // all start from here
+app.get((req, res, next) => {
+  console.log(req.ip);
+  next();
+});
+
 app.use("/", require("./apiRoutes"));
 
 app.get("*", (req, res, next) => {
@@ -153,7 +158,8 @@ io = new Server({
 
 const socketService = new SocketIOService(io);
 
-server.listen(port, () => {
+server.listen(port, async () => {
+  await connectMongoDb();
   log.debug("Server is running...\nport " + port);
 });
 

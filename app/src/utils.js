@@ -3,6 +3,8 @@ const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const { v4: uuidV4 } = require("uuid");
+const { default: mongoose } = require("mongoose");
+const config = require("./config");
 
 const log = new Logs("server");
 
@@ -203,6 +205,15 @@ const canJoin = (reqQuery) => {
   return true;
 };
 
+const connectMongoDb = async () => {
+  try {
+    await mongoose.connect(config.mongo_uri);
+    console.log(`Connected to MongoDB at ${config.mongo_uri}`);
+  } catch (err) {
+    console.error(`There is an error while connecting to database \n ${err}`);
+  }
+};
+
 module.exports = {
   errorHandler,
   makeHttps,
@@ -211,4 +222,5 @@ module.exports = {
   getMeetingURL,
   findFreePeer,
   canJoin,
+  connectMongoDb,
 };
