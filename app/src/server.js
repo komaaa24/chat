@@ -14,6 +14,7 @@ const log = new Logs("server");
 const { errorHandler, makeHttps, connectMongoDb } = require("./utils");
 const checkConnection = require("./canaryTest");
 const SocketIOService = require("./socketIOService");
+const User = require("./models/user.model");
 
 const isHttps = false; // must be the same on client.js
 const port = process.env.PORT || 3000; // must be the same to client.js signalingServerPort
@@ -89,10 +90,20 @@ app.use(
 ); // api docs
 
 // all start from here
-app.get("*", (req, res, next) => {
-  console.log("something");
-  console.log(req.ip);
-  next();
+app.get("*", async (req, res, next) => {
+  try {
+    const isNewUser = await User.findOne({ ip: req.ip });
+    if (!isNewUser) {
+      const newUser = await User.create({
+        ip: req.ip,
+        watched: [],
+      });
+      await newUser.save();
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.use("/", require("./apiRoutes"));
