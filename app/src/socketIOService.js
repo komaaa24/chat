@@ -581,12 +581,14 @@ module.exports = class SocketIOService {
         should_create_offer: false,
         iceServers: config.iceServers,
       });
+
+      console.log(config.iceServers);
       // offer true
       socket.emit("addPeer", {
         peer_id: id,
         peers: peers[channel],
         should_create_offer: true,
-        iceServers: iceServers,
+        iceServers: config.iceServers,
       });
       log.debug("[" + socket.id + "] emit addPeer [" + id + "]");
     }
