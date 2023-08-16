@@ -128,13 +128,12 @@ app.get("*", (req, res, next) => {
  * Check the functionality of STUN/TURN servers:
  * https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
  */
-const iceServers = config.iceServers;
 
 // Stun is always needed
-iceServers.push({ urls: stun });
+config.iceServers.push({ urls: stun });
 
 if (turnEnabled == "true") {
-  iceServers.push({
+  config.iceServers.push({
     urls: turnUrls,
     username: turnUsername,
     credential: turnCredential,
@@ -147,7 +146,7 @@ if (turnEnabled == "true") {
   //   username: "openrelayproject",
   //   credential: "openrelayproject",
   // });
-  iceServers.push({
+  config.iceServers.push({
     urls: turnUrls,
     username: turnUsername,
     credential: turnCredential,
