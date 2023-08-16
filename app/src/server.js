@@ -111,9 +111,6 @@ app.get("*", async (req, res, next) => {
   }
 });
 
-const videos = getAllVideoPaths(config.dir.public);
-console.log(videos)
-
 app.use("/", require("./apiRoutes"));
 
 app.get("*", (req, res, next) => {
@@ -176,7 +173,7 @@ io = new Server({
 const socketService = new SocketIOService(io);
 
 server.listen(port, async () => {
-  await connectMongoDb();
+  await connectMongoDb(config.mongo_uri);
   log.debug("Server is running...\nport " + port);
 });
 

@@ -5,6 +5,7 @@ const http = require("http");
 const { v4: uuidV4 } = require("uuid");
 const { default: mongoose } = require("mongoose");
 const config = require("./config");
+require("dotenv").config();
 
 const log = new Logs("server");
 
@@ -205,10 +206,10 @@ const canJoin = (reqQuery) => {
   return true;
 };
 
-const connectMongoDb = async () => {
+const connectMongoDb = async (uri) => {
   try {
-    await mongoose.connect(config.mongo_uri);
-    console.log(`Connected to MongoDB at ${config.mongo_uri}`);
+    await mongoose.connect(uri);
+    console.log(`Connected to MongoDB...`);
   } catch (err) {
     console.error(`There is an error while connecting to database \n ${err}`);
   }
@@ -223,9 +224,8 @@ const getAllVideoPaths = (videosPath) => {
     if (!stat.isDirectory())
       videoPathArray.push({
         path: file,
-        name: file,
-        sizeInBytes: stat["size"],
-        lastModifiedAt: info,
+        // sizeInBytes: stat["size"],
+        // lastModifiedAt: info,
       });
   });
   return videoPathArray;

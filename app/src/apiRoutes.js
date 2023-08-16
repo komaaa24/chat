@@ -7,23 +7,44 @@ const config = require("./config");
 const { canJoin, findFreePeer, getMeetingURL } = require("./utils");
 const fs = require("fs");
 const path = require("path");
-const { peers, sockets } = require("./socketIOService");
+const User = require("./models/user.model");
 
 const log = new Logs("server");
 // const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
 
 router.get("/stream", (req, res, next) => {
-  res.sendFile();
+  res.sendFile(config.views.stream);
 });
 
 // FIXME ip will be sent then I have to get it and send appropriate video stream
-router.get("/video", (req, res, next) => {
+router.get("/video", async (req, res, next) => {
+  // console.log(req.ip);
+  let user = await User.findOne({ ip: req.ip });
+
+  if (!user) {
+    user = await User.create({ ip });
+  }
+
+  // console.log(user.watched);
+  let videos = config.videos;
+  videos = videos.filter((v) => !user.watched.includes(v.path));
+  let video =
+    videos.length > 0
+      ? videos[Math.ceil(Math.random() * videos.length - 1)]
+      : config.videos[Math.ceil(Math.random() * config.videos.length - 1)];
+
+  if (user.watched.length >= config.videos.length) {
+    user.watched = [];
+  }
+  user.watched.push(video.path);
+  await user.save();
   const range = req.headers.range;
   if (!range) {
     res.status(400).send("Requires Range header");
     return;
   }
-  const videoPath = path.resolve(__dirname, "../../video1.mp4");
+
+  const videoPath = path.resolve(video.path);
   const videoSize = fs.statSync(videoPath).size;
 
   const CHUNK_SIZE = 10 ** 6; // 1M

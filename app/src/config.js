@@ -1,5 +1,6 @@
 const path = require("path");
 const { getAllVideoPaths } = require("./utils");
+require("dotenv").config();
 
 module.exports = {
   channels: {}, // collect channels
@@ -15,6 +16,7 @@ module.exports = {
     privacy: path.join(__dirname, "../../", "public/views/privacy.html"),
     stunTurn: path.join(__dirname, "../../", "public/views/testStunTurn.html"),
     teststream: path.join(__dirname, "../../", "public/views/teststream.html"),
+    stream: path.join(__dirname, "../../", "public/views/stream.html"),
   },
   dir: {
     public: path.join(__dirname, "../../", "public"),
@@ -29,7 +31,6 @@ module.exports = {
   ],
   turn: {
     status: true,
-    urls: [,],
     credential: [
       {
         url: "turn:a.relay.metered.ca:80" || process.env.TURN_URLS,
