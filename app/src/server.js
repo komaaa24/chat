@@ -94,6 +94,7 @@ app.use(
   swaggerUi.setup(swaggerDocument)
 ); // api docs
 
+
 // all start from here
 // app.get("*", async (req, res, next) => {
 //   try {
