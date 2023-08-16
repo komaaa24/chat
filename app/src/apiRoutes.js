@@ -20,7 +20,6 @@ router.get("/stream", (req, res, next) => {
 router.get("/video", async (req, res, next) => {
   // console.log(req.ip);
   let user = await User.findOne({ ip: req.ip });
-  console.log(req.ip);
 
   if (!user) {
     user = await User.create({ ip });
@@ -39,33 +38,42 @@ router.get("/video", async (req, res, next) => {
   }
   user.watched.push(video.path);
   await user.save();
-  const range = req.headers.range;
-  if (!range) {
-    res.status(400).send("Requires Range header");
-    return;
-  }
+
+  // const range = req.headers.range;
+  // if (!range) {
+  //   res.status(400).send("Requires Range header");
+  //   return;
+  // }
 
   const videoPath = path.resolve(video.path);
-  const videoSize = fs.statSync(videoPath).size;
+  // const videoSize = fs.statSync(videoPath).size;
 
-  const CHUNK_SIZE = 10 ** 6; // 1M
-  const start = Number(range.replace(/\D/g, ""));
-  const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
+  // const CHUNK_SIZE = 10 ** 6; // 1M
+  // const start = Number(range.replace(/\D/g, ""));
+  // if (start >= videoSize) {
+  //   // Send error
+  //   res.status(416).send("Range not satisfiable");
+  //   return;
+  // }
+  // const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
 
-  // headers
-  const contentLength = end - start + 1;
-  const headers = {
-    "Content-Range": `bytes ${start}-${end}/${videoSize}`,
-    "Accept-Ranges": "bytes",
-    "Content-Length": contentLength,
-    "Content-Type": "video/mp4",
-  };
+  // // headers
+  // const contentLength = end - start + 1;
+  // const headers = {
+  //   "Content-Range": `bytes ${start}-${end}/${videoSize}`,
+  //   "Accept-Ranges": "bytes",
+  //   "Content-Length": contentLength,
+  //   "Content-Type": "video/mp4",
+  // };
 
-  res.writeHead(206, headers);
+  // res.writeHead(206, headers);
 
-  const videoStream = fs.createReadStream(videoPath, { start, end });
+  // const videoStream = fs.createReadStream(videoPath, { start, end });
 
-  videoStream.pipe(res);
+  // videoStream.pipe(res);
+
+  res.status(200).send({ path: videoPath });
+  return;
 });
 
 router.get("/", (req, res, next) => {
