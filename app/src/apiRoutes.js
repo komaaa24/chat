@@ -87,7 +87,11 @@ router.get("/video", async (req, res, next) => {
 
   res
     .status(200)
-    .send({ path: video.path, title: video.title, duration: video.duration });
+    .send({
+      path: video.path.split("public")[1],
+      title: video.title,
+      duration: video.duration,
+    });
   return;
 });
 
