@@ -293,6 +293,7 @@ module.exports = class SocketIOService {
       });
 
       socket.on("nextPeer", async (config) => {
+        console.log("that's working " + Object.values(config.peers).length);
         log.debug("Next button", config);
         let freePeer = this.findFreePeer(
           config.room_id,
