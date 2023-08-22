@@ -303,7 +303,7 @@ module.exports = class SocketIOService {
           this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
             freePeer: freePeer,
             error: null,
-            peersCount: Object.values(configs.peers).length
+            peersCount: Object.values(config.peers).length
           });
         } else {
           if (config.typeOfCall == "leftUser") {
