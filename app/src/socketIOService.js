@@ -293,7 +293,8 @@ module.exports = class SocketIOService {
       });
 
       socket.on("nextPeer", async (config) => {
-        console.log("that's working " + Object.values(config.peers).length);
+        const peersLength = Object.values(configs.peers).length || 0;
+        console.log("that's working " + peersLength);
         log.debug("Next button", config);
         let freePeer = this.findFreePeer(
           config.room_id,
@@ -304,7 +305,7 @@ module.exports = class SocketIOService {
           this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
             freePeer: freePeer,
             error: null,
-            peersCount: Object.values(config.peers).length
+            peersCount: peersLength
           });
         } else {
           if (config.typeOfCall == "leftUser") {
