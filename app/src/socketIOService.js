@@ -312,12 +312,14 @@ module.exports = class SocketIOService {
             this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "stay",
+              peersCount: peersLength
             });
           } else {
             freePeer = urlMaker();
             this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "No peer",
+              peersCount: peersLength
             });
           }
         }
