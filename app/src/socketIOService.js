@@ -296,27 +296,28 @@ module.exports = class SocketIOService {
         const peersLength = Object.values(configs.peers).length || 0;
         console.log("that's working " + peersLength);
         log.debug("Next button", config);
+        await this.sendToPeer(config.peer_id, configs.sockets, "peersLength", peersLength);
         let freePeer = this.findFreePeer(
           config.room_id,
           config.last5peers,
           config.typeOfCall
         );
         if (freePeer) {
-          this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
+          await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
             freePeer: freePeer,
             error: null,
             peersCount: peersLength
           });
         } else {
           if (config.typeOfCall == "leftUser") {
-            this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
+            await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "stay",
               peersCount: peersLength
             });
           } else {
             freePeer = urlMaker();
-            this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
+            await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "No peer",
               peersCount: peersLength
