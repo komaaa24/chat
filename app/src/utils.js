@@ -4,7 +4,6 @@ const https = require("https");
 const http = require("http");
 const { v4: uuidV4 } = require("uuid");
 const { default: mongoose } = require("mongoose");
-const config = require("./config");
 require("dotenv").config();
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const { faker } = require("@faker-js/faker");

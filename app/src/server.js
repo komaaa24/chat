@@ -6,37 +6,36 @@ const { Server } = require("socket.io");
 const compression = require("compression");
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
+
 const app = express();
-const ffmpeg = require("ffmpeg");
+// const ffmpeg = require("ffmpeg");
 const Logs = require("./logs");
 const log = new Logs("server");
 const {
   errorHandler,
   makeHttps,
   connectMongoDb,
-  getAllVideoPaths,
 } = require("./utils");
 const checkConnection = require("./canaryTest");
 const SocketIOService = require("./socketIOService");
-const User = require("./models/user.model");
+
 
 const isHttps = false; // must be the same on client.js
 const port = process.env.PORT || 3000; // must be the same to client.js signalingServerPort
 
 let io;
 
-// Swagger config
-const yamlJS = require("yamljs");
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = yamlJS.load(
-  path.join(__dirname + "/../api/swagger.yaml")
-);
+// // Swagger config
 
+// const yamlJS = require("yamljs");
+// const swaggerUi = require("swagger-ui-express");
+// const swaggerDocument = yamlJS.load(
+//   path.join(__dirname + "/../api/swagger.yaml")
+// );
 // Api config
 
 const apiBasePath = "/api/v1"; // api endpoint path
-const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
+// const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
 
 //const stun = process.env.STUN || "stun:iphone-stun.strato-iphone.de:3478" || "stun:stun.l.google.com:19302";
 //const stun = "stun:bn-turn1.xirsys.com";
@@ -56,11 +55,11 @@ const turnUsername2 = config.turn.credential[1].username;
 
 // understood
 // Sentry config
-const Sentry = require("@sentry/node");
-const { CaptureConsole } = require("@sentry/integrations");
-const sentryEnabled = process.env.SENTRY_ENABLED || false;
-const sentryDSN = process.env.SENTRY_DSN;
-const sentryTracesSampleRate = process.env.SENTRY_TRACES_SAMPLE_RATE;
+// const Sentry = require("@sentry/node");
+// const { CaptureConsole } = require("@sentry/integrations");
+// const sentryEnabled = process.env.SENTRY_ENABLED || false;
+// const sentryDSN = process.env.SENTRY_DSN;
+// const sentryTracesSampleRate = process.env.SENTRY_TRACES_SAMPLE_RATE;
 
 // Setup sentry client
 // if (sentryEnabled == "true") {
@@ -88,11 +87,11 @@ app.use(compression()); // Compress all HTTP responses using GZip
 app.use(express.json()); // Api parse body data as json
 app.use(express.static(dir.public)); // Use all static files from the public folder
 app.use(express.urlencoded({ extended: true })); // Need for Slack API body parser
-app.use(
-  apiBasePath + "/docs",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
-); // api docs
+// app.use(
+//   apiBasePath + "/docs",
+//   swaggerUi.serve,
+//   swaggerUi.setup(swaggerDocument)
+// ); // api docs
 
 // all start from here
 // app.get("*", async (req, res, next) => {
