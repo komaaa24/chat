@@ -1,11 +1,13 @@
 "use strict";
 
-require("dotenv").config();
+const dotenv = require("dotenv");
 const config = require("./config");
 const { Server } = require("socket.io");
 const compression = require("compression");
 const express = require("express");
 const cors = require("cors");
+
+dotenv.config();
 
 const app = express();
 // const ffmpeg = require("ffmpeg");
@@ -171,7 +173,7 @@ io = new Server({
 
 const socketService = new SocketIOService(io);
 
-server.listen(port, async () => {
+server.listen(port, () => {
   // await connectMongoDb(config.mongo_uri);
   log.debug("Server is running...\nport " + port);
 });

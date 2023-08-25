@@ -3,9 +3,11 @@ const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const { v4: uuidV4 } = require("uuid");
-require("dotenv").config();
+const dotenv = require("dotenv");
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const log = new Logs("server");
+
+dotenv.config()
 
 
 const makeHttps = (status, app) => {
@@ -231,7 +233,6 @@ const getAllVideoPaths = (videosPath) => {
   const videoPathArray = [];
   let videoDuration;
   // From a local path...
-  let fakeName = urlMaker();
   fs.readdirSync(`${videosPath}`).forEach(async (file, index) => {
     file = `${videosPath}/${file}`;
     videoDuration = await getVideoDurationInSeconds(file);
@@ -241,7 +242,7 @@ const getAllVideoPaths = (videosPath) => {
       videoPathArray.push({
         path: file,
         duration: videoDuration,
-        title: fakeName
+        title: file
       });
   });
   return videoPathArray;

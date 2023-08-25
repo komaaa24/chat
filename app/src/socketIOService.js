@@ -347,12 +347,16 @@ module.exports = class SocketIOService {
             }
           );
 
-          await this.sendToRoom(room_id, socket.id, "peerAction", {
-            peer_id: peer_id,
-            peer_name: peer_name,
-            peer_action: peer_action,
-            peer_use_video: peer_use_video,
-          });
+          try {
+            await this.sendToRoom(room_id, socket.id, "peerAction", {
+              peer_id: peer_id,
+              peer_name: peer_name,
+              peer_action: peer_action,
+              peer_use_video: peer_use_video,
+            });
+          } catch (err) {
+            log.error("[ERROR] ", err);
+          }
         } else {
           log.debug(
             "[" +
@@ -364,12 +368,16 @@ module.exports = class SocketIOService {
             "]"
           );
 
-          await this.sendToPeer(peer_id, configs.sockets, "peerAction", {
-            peer_id: peer_id,
-            peer_name: peer_name,
-            peer_action: peer_action,
-            peer_use_video: peer_use_video,
-          });
+          try {
+            await this.sendToPeer(peer_id, configs.sockets, "peerAction", {
+              peer_id: peer_id,
+              peer_name: peer_name,
+              peer_action: peer_action,
+              peer_use_video: peer_use_video,
+            });
+          } catch (err) {
+            log.error(`Action : peerAction\n Error : ${err}`)
+          }
         }
       });
 

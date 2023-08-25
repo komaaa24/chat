@@ -57,14 +57,11 @@ router.get("/video", async (req, res, next) => {
   // }
 
   let video = videos[Math.ceil(Math.random() * videos.length - 1)];
-  video = {
-    path: video.path,
-    duration: video.duration,
-    title: video.title,
-  }
   let videoPath = path.resolve(video.path);
 
+
   videoPath = makeUrlForVideo(videoPath);
+  video.title = videoPath.split("\\")[1].split(".")[0];
 
   // const CHUNK_SIZE = 10 ** 6; // 1M
   // const start = Number(range.replace(/\D/g, ""));
