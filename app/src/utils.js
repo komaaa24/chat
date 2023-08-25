@@ -3,7 +3,6 @@ const fs = require("fs");
 const https = require("https");
 const http = require("http");
 const { v4: uuidV4 } = require("uuid");
-const { default: mongoose } = require("mongoose");
 require("dotenv").config();
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const { faker } = require("@faker-js/faker");
@@ -214,14 +213,14 @@ const canJoin = (reqQuery) => {
   return true;
 };
 
-const connectMongoDb = async (uri) => {
-  try {
-    await mongoose.connect(uri);
-    console.log(`Connected to MongoDB...`);
-  } catch (err) {
-    console.error(`There is an error while connecting to database \n ${err}`);
-  }
-};
+// const connectMongoDb = async (uri) => {
+//   try {
+//     await mongoose.connect(uri);
+//     console.log(`Connected to MongoDB...`);
+//   } catch (err) {
+//     console.error(`There is an error while connecting to database \n ${err}`);
+//   }
+// };
 
 /**
  *
@@ -262,7 +261,7 @@ module.exports = {
   getMeetingURL,
   findFreePeer,
   canJoin,
-  connectMongoDb,
+  // connectMongoDb,
   getAllVideoPaths,
   makeUrlForVideo,
 };
