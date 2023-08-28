@@ -12,85 +12,39 @@ const {
 } = require("./utils");
 const fs = require("fs");
 const path = require("path");
-// const User = require("./models/user.model");
-// const { getVideoDurationInSeconds } = require("get-video-duration");
+
 
 const log = new Logs("server");
-// const api_key_secret = process.env.API_KEY_SECRET || "videochat_default_secret";
+const USERS = new Map();
 
 router.get("/stream", (req, res, next) => {
   res.sendFile(config.views.stream);
 });
 
 router.get("/video", async (req, res, next) => {
-  // console.log(req.ip);
+  const videos = config.videos;
+  
+  if(!USERS.get(req.ip)){
+     USERS.set(req.ip,[]);
+  }
+  
+  let filteredVideos  = videos.filter(e=>!USERS.get(req.ip).includes(e));
+  
+  if(filteredVideos.length==0){
+    USERS.delete(req.ip);
+    filteredVideos = videos;
+  } 
 
-  // let user = await User.findOne({ ip: req.ip });
+  let video = filteredVideos[Math.ceil(Math.random() * filteredVideos.length - 1)];
+  
+  USERS.get(req.ip).push(video);
 
-  // if (!user) {
-  //   user = await User.create({ ip: req.ip });
-  // }
-
-  let videos = config.videos;
-  // videos = videos.filter((v) => !user.watched.includes(v.path));
-  // let video =
-  //   videos.length > 0
-  //     ? videos[Math.ceil(Math.random() * videos.length - 1)]
-  //     : config.videos[Math.ceil(Math.random() * config.videos.length - 1)];
-
-  // if (user.watched.length >= config.videos.length) {
-  //   user.watched = [];
-  // }
-
-  // user.watched.push({
-  //   path: video.path,
-  //   duration: video.duration,
-  //   title: video.title,
-  // });
-  // console.log(user.watched);
-  // await user.save();
-
-  // const range = req.headers.range;
-  // if (!range) {
-  //   res.status(400).send("Requires Range header");
-  //   return;
-  // }
-
-  let video = videos[Math.ceil(Math.random() * videos.length - 1)];
-  let videoPath = path.resolve(video.path);
-
-
-  videoPath = makeUrlForVideo(videoPath);
-
-  // const CHUNK_SIZE = 10 ** 6; // 1M
-  // const start = Number(range.replace(/\D/g, ""));
-  // if (start >= videoSize) {
-  //   // Send error
-  //   res.status(416).send("Range not satisfiable");
-  //   return;
-  // }
-  // const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
-
-  // // headers
-  // const contentLength = end - start + 1;
-  // const headers = {
-  //   "Content-Range": `bytes ${start}-${end}/${videoSize}`,
-  //   "Accept-Ranges": "bytes",
-  //   "Content-Length": contentLength,
-  //   "Content-Type": "video/mp4",
-  // };
-
-  // res.writeHead(206, headers);
-
-  // const videoStream = fs.createReadStream(videoPath, { start, end });
-
-  // videoStream.pipe(res);
   res
     .status(200)
     .send({
-      path: video.path.split("public")[1],
-      title: `${video.path.split("public")[1].split("/")[1].split(".")}`,
-      duration: video.duration,
+      path: video,
+      title: video.split("/")[2].split(".")[0],
+      duration: 20,
     });
   return;
 });

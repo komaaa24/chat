@@ -1,15 +1,13 @@
 const path = require("path");
-const { getAllVideoPaths } = require("./utils");
 require("dotenv").config();
 
-let videosPaths = getAllVideoPaths(
-  path.join(__dirname, "../../", "public", "videos")
-);
 module.exports = {
   channels: {}, // collect channels
   sockets: {}, // collect sockets
   peers: {},
-  videos: videosPaths,
+  videos: ["/videos/alisa.mp4","/videos/aziza.mp4","/videos/john.mp4","/videos/maria.mp4","/videos/mark.mp4", 
+    "/videos/nozima.mp4","/videos/shohida.mp4"
+],
   views: {
     client: path.join(__dirname, "../../", "public/views/client.html"),
     landing: path.join(__dirname, "../../", "public/views/landing.html"),
@@ -50,3 +48,4 @@ module.exports = {
   mongo_uri: process.env.MONGO_URI,
   iceServers: [],
 };
+

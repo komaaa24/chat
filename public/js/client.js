@@ -25,6 +25,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 "use strict"; // https://www.w3schools.com/js/js_strict.asp
 
+const BASE_URL="https://videochat.uz";
 const isHttps = false; // must be the same on server.js
 const signalingServer = getSignalingServer();
 const roomId = getRoomId();
@@ -1673,7 +1674,7 @@ function handleNextPeer(config) {
   if (config.error == "No peer") {
     if (fakeBotsAmount < fakeBotsLimit && config.peersCount < 2) {
       fakeBotsAmount++;
-      fetch("https://videochatuz-production.up.railway.app/video")
+      fetch(BASE_URL+'/video')
         .then(res => res.json())
         .then((resp) => {
           console.log(resp)
@@ -1688,7 +1689,7 @@ function handleNextPeer(config) {
               peer_rec_status: false
             }
           }
-          loadRemoteMediaStream("https://videochatuz-production.up.railway.app" + resp.path, peers, "NrbVoHSuIovu4ZjJAAAD1", "video");
+          loadRemoteMediaStream(BASE_URL + resp.path, peers, "NrbVoHSuIovu4ZjJAAAD1", "video");
           getId("nextBtnLoading").style.display = "none";
           setTimeout(() => {
             openURL("/join/" + config.freePeer);
