@@ -293,15 +293,8 @@ module.exports = class SocketIOService {
       });
 
       socket.on("nextPeer", async (config) => {
-       console.log("-----------------------------");
-        console.log(config);
-        console.log("---------------------------");
-        console.log(configs.peers);
-        console.log("---------------------------------"); 
-        const peersLength = Object.keys(configs.peers).length>0 ? Object.keys(configs.peers[Object.keys(configs.peers)[0]]).length : 0; 
-        console.log("------------------------------------------");
-        console.log(peersLength,config.room_id);
-        console.log("------------------------------------------");
+        const isNull = (configs.peers !=null && configs.peers!=undefined )?true:false;        
+        const peersLength =( isNull && Object.keys(configs.peers).length>0) ? Object.keys(configs.peers[Object.keys(configs.peers)[0]]).length : 0; 
         let freePeer = this.findFreePeer(
           config.room_id,
           config.last5peers,
@@ -518,7 +511,7 @@ module.exports = class SocketIOService {
        * @returns {json} indent 4 spaces
        */
 
-      this.checkFreePeersAndMerge(configs.peers, this.sendToPeer);
+     // this.checkFreePeersAndMerge(configs.peers, this.sendToPeer);
     }); // end [sockets.on-connect]
   }
 
@@ -647,7 +640,7 @@ module.exports = class SocketIOService {
           freePeer: secondChannel,
         });
       }
-    }, 10000);
+    }, 40000);
     return available;
   }
 };

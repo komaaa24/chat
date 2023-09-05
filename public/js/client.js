@@ -1567,7 +1567,7 @@ function handleSessionDescription(config) {
               })
               .catch((err) => {
                 console.error("[Error] answer setLocalDescription", err);
-                userLog("error", "Answer setLocalDescription failed " + err);
+              //  userLog("error", "Answer setLocalDescription failed " + err);
               });
           })
           .catch((err) => {

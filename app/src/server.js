@@ -9,7 +9,7 @@ const cors = require("cors");
 
 dotenv.config();
 
-
+let maxUsers = new Set();
 console.log("this is on master branchJ");
 
 process.on("unhandledRejection", (err) => {
@@ -122,6 +122,18 @@ app.use(express.urlencoded({ extended: true })); // Need for Slack API body pars
 
 app.use("/", require("./apiRoutes"));
 
+app.use('*',(req,res,next)=>{
+    maxUsers.add(req.ip);
+    next();
+});
+
+app.get("/api/v1/maxusers",(req,res,next)=>{
+
+    res.json(maxUsers.size);
+    return;
+});
+
+
 app.get("*", (req, res, next) => {
   res.sendFile(config.views.notFound);
 });
@@ -186,6 +198,6 @@ server.listen(port, () => {
 });
 
 // every 15 seconds, send a ping to each socket to make sure it's still alive
-checkConnection(io, 15000);
+checkConnection(io, 25000);
 
 module.exports = { app };
