@@ -4,18 +4,10 @@ const express = require("express");
 const Logs = require("./logs");
 const router = express.Router();
 const config = require("./config");
-const {
-  canJoin,
-  findFreePeer,
-  getMeetingURL,
-  makeUrlForVideo,
-} = require("./utils");
-const fs = require("fs");
-const path = require("path");
-
+const { canJoin, findFreePeer, getMeetingURL } = require("./utils");
+const crypto = require("crypto");
 
 const log = new Logs("server");
-const USERS = new Map();
 
 router.get("/stream", (req, res, next) => {
   res.sendFile(config.views.stream);
@@ -23,31 +15,34 @@ router.get("/stream", (req, res, next) => {
 
 router.get("/video", async (req, res, next) => {
   const videos = config.videos;
-  
-  if(!USERS.get(req.ip)){
-     USERS.set(req.ip,[]);
+  let newUserId;
+  const user = req.cookies["user_id"];
+
+  if (!user) {
+    newUserId = crypto.randomUUID();
+    res.cookie("user_id", newUserId, { maxAge: 90 * 24 * 60 * 60 * 10 });
+    config.users.newUserId = [];
   }
-  
-  let filteredVideos  = videos.filter(e=>!USERS.get(req.ip).includes(e));
-  
-  if(filteredVideos.length==0){
-    USERS.delete(req.ip);
-    filteredVideos = videos;
-  } 
+  if (!config.users.newUserId) {
+    config.users.newUserId = [];
+  }
 
-  let video = filteredVideos[Math.ceil(Math.random() * filteredVideos.length - 1)];
-  if(!USERS.get(req.ip)){
-    USERS.set(req.ip,[]);
-  } 
-  USERS.get(req.ip).push(video);
+  const watchedVideos = config.users.newUserId;
+  console.log(watchedVideos);
+  let filteredVideos = videos.filter((e) => !watchedVideos.includes(e));
 
-  res
-    .status(200)
-    .send({
-      path: video,
-      title: video.split("/")[2].split(".")[0],
-      duration: 15,
-    });
+  if (filteredVideos.length == 0) {
+    return res.status(200).send({ message: "empty" });
+  }
+
+  let video =
+    filteredVideos[Math.ceil(Math.random() * filteredVideos.length - 1)];
+  config.users.newUserId.push(video);
+  res.status(200).send({
+    path: video,
+    title: video.split("/")[2].split(".")[0],
+    duration: 15,
+  });
   return;
 });
 

@@ -2,11 +2,21 @@ const path = require("path");
 require("dotenv").config();
 
 module.exports = {
+  users: {},
   channels: {}, // collect channels
   sockets: {}, // collect sockets
   peers: {},
-  videos: ["/videos/alisa.mp4", "/videos/aziza.mp4", "/videos/john.mp4", "/videos/maria.mp4", "/videos/mark.mp4",
-    "/videos/nozima.mp4", "/videos/shohida.mp4", "/videos/gulchehra.mp4", "/videos/phobe.mp4", "/videos/rose.mp4"
+  videos: [
+    "/videos/alisa.mp4",
+    "/videos/aziza.mp4",
+    "/videos/john.mp4",
+    "/videos/maria.mp4",
+    "/videos/mark.mp4",
+    "/videos/nozima.mp4",
+    "/videos/shohida.mp4",
+    "/videos/gulchehra.mp4",
+    "/videos/phobe.mp4",
+    "/videos/rose.mp4",
   ],
   views: {
     client: path.join(__dirname, "../../", "public/views/client.html"),
@@ -48,4 +58,3 @@ module.exports = {
   mongo_uri: process.env.MONGO_URI,
   iceServers: [],
 };
-

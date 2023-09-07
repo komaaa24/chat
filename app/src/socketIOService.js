@@ -51,7 +51,7 @@ module.exports = class SocketIOService {
       // understood
       socket.on("join", async (config) => {
         // log.debug('Join room', config);
-       // log.debug("[" + socket.id + "] join ", config);
+        // log.debug("[" + socket.id + "] join ", config);
 
         let channel = config.channel;
         let channel_password = config.channel_password;
@@ -293,8 +293,12 @@ module.exports = class SocketIOService {
       });
 
       socket.on("nextPeer", async (config) => {
-        const isNull = (configs.peers !=null && configs.peers!=undefined )?true:false;        
-        const peersLength =( isNull && Object.keys(configs.peers).length>0) ? Object.keys(configs.peers[Object.keys(configs.peers)[0]]).length : 0; 
+        const isNull =
+          configs.peers != null && configs.peers != undefined ? true : false;
+        const peersLength =
+          isNull && Object.keys(configs.peers).length > 0
+            ? Object.keys(configs.peers[Object.keys(configs.peers)[0]]).length
+            : 0;
         let freePeer = this.findFreePeer(
           config.room_id,
           config.last5peers,
@@ -304,21 +308,21 @@ module.exports = class SocketIOService {
           await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
             freePeer: freePeer,
             error: null,
-            peersCount: peersLength
+            peersCount: peersLength,
           });
         } else {
           if (config.typeOfCall == "leftUser") {
             await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "stay",
-              peersCount: peersLength
+              peersCount: peersLength,
             });
           } else {
             freePeer = urlMaker();
             await this.sendToPeer(config.peer_id, configs.sockets, "nextPeer", {
               freePeer: freePeer,
               error: "No peer",
-              peersCount: peersLength
+              peersCount: peersLength,
             });
           }
         }
@@ -360,12 +364,12 @@ module.exports = class SocketIOService {
         } else {
           log.debug(
             "[" +
-            socket.id +
-            "] emit peerAction to [" +
-            peer_id +
-            "] from room_id [" +
-            room_id +
-            "]"
+              socket.id +
+              "] emit peerAction to [" +
+              peer_id +
+              "] from room_id [" +
+              room_id +
+              "]"
           );
 
           try {
@@ -376,7 +380,7 @@ module.exports = class SocketIOService {
               peer_use_video: peer_use_video,
             });
           } catch (err) {
-            log.error(`Action : peerAction\n Error : ${err}`)
+            log.error(`Action : peerAction\n Error : ${err}`);
           }
         }
       });
@@ -393,12 +397,12 @@ module.exports = class SocketIOService {
 
         log.debug(
           "[" +
-          socket.id +
-          "] kick out peer [" +
-          peer_id +
-          "] from room_id [" +
-          room_id +
-          "]"
+            socket.id +
+            "] kick out peer [" +
+            peer_id +
+            "] from room_id [" +
+            room_id +
+            "]"
         );
 
         await this.sendToPeer(peer_id, configs.sockets, "kickOut", {
@@ -428,12 +432,12 @@ module.exports = class SocketIOService {
 
         log.debug(
           "[" +
-          socket.id +
-          "] Peer [" +
-          peer_name +
-          "] send file to room_id [" +
-          room_id +
-          "]",
+            socket.id +
+            "] Peer [" +
+            peer_name +
+            "] send file to room_id [" +
+            room_id +
+            "]",
           {
             peerName: file.peerName,
             fileName: file.fileName,
@@ -476,12 +480,12 @@ module.exports = class SocketIOService {
         if (peer_id) {
           log.debug(
             "[" +
-            socket.id +
-            "] emit videoPlayer to [" +
-            peer_id +
-            "] from room_id [" +
-            room_id +
-            "]",
+              socket.id +
+              "] emit videoPlayer to [" +
+              peer_id +
+              "] from room_id [" +
+              room_id +
+              "]",
             logMe
           );
 
@@ -494,10 +498,10 @@ module.exports = class SocketIOService {
         } else {
           log.debug(
             "[" +
-            socket.id +
-            "] emit videoPlayer to [room_id: " +
-            room_id +
-            "]",
+              socket.id +
+              "] emit videoPlayer to [room_id: " +
+              room_id +
+              "]",
             logMe
           );
 
@@ -511,7 +515,7 @@ module.exports = class SocketIOService {
        * @returns {json} indent 4 spaces
        */
 
-     // this.checkFreePeersAndMerge(configs.peers, this.sendToPeer);
+      // this.checkFreePeersAndMerge(configs.peers, this.sendToPeer);
     }); // end [sockets.on-connect]
   }
 
@@ -569,11 +573,17 @@ module.exports = class SocketIOService {
   findFreePeer(roomID, last5, typeOfCall) {
     // remove roomID from peers, it may be a key of peers object
     let allChannels = configs.peers;
+    console.log(allChannels);
     delete allChannels[roomID];
     let available = Object.keys(configs.peers).filter(
       (key) => Object.keys(configs.peers[key]).length === 1
     );
-    let newestPeers = available.filter((key) => !last5.includes(key));
+    if (available.length > 2) {
+      available.pop();
+    }
+    let newestPeers = available;
+    console.log(newestPeers);
+    // let newestPeers = available.filter((key) => !last5.includes(key));
     if (newestPeers.length > 0) {
       return newestPeers[Math.floor(Math.random() * newestPeers.length)];
     } else if (available.length > 0 && typeOfCall !== "leftUser") {
@@ -623,7 +633,7 @@ module.exports = class SocketIOService {
 
   checkFreePeersAndMerge(peers, senderFunc) {
     let available;
-    console.log("Shu "+peers);
+    console.log("Shu " + peers);
     setInterval(function () {
       available = Object.keys(peers).filter(
         (key) => Object.keys(peers[key]).length === 1

@@ -8,27 +8,19 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-
 dotenv.config();
-
-
 
 const app = express();
 const Logs = require("./logs");
 const log = new Logs("server");
-const {
-  errorHandler,
-  makeHttps , memorizeUsers
-} = require("./utils");
+const { errorHandler, makeHttps } = require("./utils");
 const checkConnection = require("./canaryTest");
 const SocketIOService = require("./socketIOService");
-
 
 const isHttps = false; // must be the same on client.js
 const port = process.env.PORT || 3000; // must be the same to client.js signalingServerPort
 
 let io;
-
 
 const apiBasePath = "/api/v1"; // api endpoint path
 
@@ -84,16 +76,11 @@ app.use(express.urlencoded({ extended: true })); // Need for Slack API body pars
 app.use(cookieParser());
 
 
-app.use(memorizeUsers);
-
 app.use("/", require("./apiRoutes"));
 
-app.use('*',(req,res,next)=>{
-    
-    next();
-
+app.use("*", (req, res, next) => {
+  next();
 });
-
 
 app.get("*", (req, res, next) => {
   res.sendFile(config.views.notFound);

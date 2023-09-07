@@ -7,8 +7,7 @@ const dotenv = require("dotenv");
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const log = new Logs("server");
 
-dotenv.config()
-
+dotenv.config();
 
 const makeHttps = (status, app) => {
   let server,
@@ -29,8 +28,6 @@ const makeHttps = (status, app) => {
 };
 
 const urlMaker = () => {
-
-
   adjectivesUz = [
     "kichik",
     "katta",
@@ -76,8 +73,7 @@ const urlMaker = () => {
     "issiq",
     "sovuq",
     "qattiq",
-    "yumshoq"
-
+    "yumshoq",
   ];
 
   nounsUz = [
@@ -132,7 +128,7 @@ const urlMaker = () => {
     "qalampir",
     "qaldirg'och",
     "begona",
-    "shamol"
+    "shamol",
   ];
   let randomizedAdjective =
     adjectivesUz[Math.floor(Math.random() * adjectivesUz.length)];
@@ -242,7 +238,7 @@ const getAllVideoPaths = (videosPath) => {
       videoPathArray.push({
         path: file,
         duration: videoDuration,
-        title: file
+        title: file,
       });
   });
   return videoPathArray;
@@ -251,24 +247,6 @@ const getAllVideoPaths = (videosPath) => {
 const makeUrlForVideo = (url) => {
   url = url.split(`\\`).slice(6);
   return `${url[0]}\\${url[1]}`;
-};
-
-
-const memorizeUsers = async(req,res,next)=>{
-     try{
-      const isOldUser = req.cookies["user_id"];
-      if(isOldUser){
-        console.log(`${isOldUser} is old user`);
-        return next();  
-     } 
-     
-      const user_id = Math.ceil(Math.random()*100000);
-      res.cookie("user_id",user_id);
-      console.log(`${user_id} is New user`);
-      return next(); 
-   } catch(err){
-    next(err);
-  }
 };
 
 module.exports = {
@@ -282,5 +260,4 @@ module.exports = {
   // connectMongoDb,
   getAllVideoPaths,
   makeUrlForVideo,
-  memorizeUsers
 };
