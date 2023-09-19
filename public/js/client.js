@@ -174,6 +174,7 @@ let BtnsBar = "horizontal"; // vertical - horizontal
 let pinVideoPositionSelect;
 let swalBackground = "#272727"; // black - #16171b - transparent ...
 let peerGeo;
+let audioOutputBtn;
 let myPeerName = getPeerName();
 let isScreenEnabled = getScreenEnabled();
 let isScreenSharingSupported = false;
@@ -2681,7 +2682,7 @@ function manageLeftButtons() {
   setFullScreenBtn();
   setChatRoomBtn();
   setChatEmojiBtn();
-  setMyHandBtn();
+
   setMySettingsBtn();
   setAboutBtn();
   setLeaveRoomBtn();
@@ -2696,99 +2697,54 @@ function setShareRoomBtn() {
     shareRoomUrl();
   });
 }
+
+function refreshLocalMedi_only_audio() {
+  stopLocalAudioTrack();
+  navigator.mediaDevices
+    .getUserMedia({ audio: true }) // Запрашиваем только аудио
+    .then(gotStream)
+    .then(gotDevices)
+    .catch(handleError);
+}
+
 /**
  * audio output device change
  */
 function setAudioOutputBtn() {
   audioOutputChangeBtn.addEventListener("click", async (e) => {
-    let allInputDevicesLength = audioInputSelect.options.length;
-    if (allInputDevicesLength == 1) {
-      return console.log("No audio input devices found");
-    } else if (allInputDevicesLength == 2) {
-      if (audioInputSelect.value === audioInputSelect.options[0].value) {
-        audioInputSelect.value = audioInputSelect.options[1].value;
-        console.log(
-          audioInputSelect.options[audioInputSelect.selectedIndex].innerText
-        );
-      } else {
-        audioInputSelect.value = audioInputSelect.options[0].value;
-        console.log(
-          audioInputSelect.options[audioInputSelect.selectedIndex].innerText
-        );
-      }
-    } else if (allInputDevicesLength == 3) {
-      if (audioInputSelect.value === audioInputSelect.options[0].value) {
-        audioInputSelect.value = audioInputSelect.options[1].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[1].value) {
-        audioInputSelect.value = audioInputSelect.options[2].value;
-      } else {
-        audioInputSelect.value = audioInputSelect.options[0].value;
-      }
-    } else if (allInputDevicesLength == 4) {
-      if (audioInputSelect.value === audioInputSelect.options[0].value) {
-        audioInputSelect.value = audioInputSelect.options[1].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[1].value) {
-        audioInputSelect.value = audioInputSelect.options[2].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[2].value) {
-        audioInputSelect.value = audioInputSelect.options[3].value;
-      } else {
-        audioInputSelect.value = audioInputSelect.options[0].value;
-      }
-    } else if (allInputDevicesLength == 5) {
-      if (audioInputSelect.value === audioInputSelect.options[0].value) {
-        audioInputSelect.value = audioInputSelect.options[1].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[1].value) {
-        audioInputSelect.value = audioInputSelect.options[2].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[2].value) {
-        audioInputSelect.value = audioInputSelect.options[3].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[3].value) {
-        audioInputSelect.value = audioInputSelect.options[4].value;
-      } else {
-        audioInputSelect.value = audioInputSelect.options[0].value;
-      }
-    } else if (allInputDevicesLength == 6) {
-      if (audioInputSelect.value === audioInputSelect.options[0].value) {
-        audioInputSelect.value = audioInputSelect.options[1].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[1].value) {
-        audioInputSelect.value = audioInputSelect.options[2].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[2].value) {
-        audioInputSelect.value = audioInputSelect.options[3].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[3].value) {
-        audioInputSelect.value = audioInputSelect.options[4].value;
-      } else if (audioInputSelect.value === audioInputSelect.options[4].value) {
-        audioInputSelect.value = audioInputSelect.options[5].value;
-      } else {
-        audioInputSelect.value = audioInputSelect.options[0].value;
-      }
+    const allInputDevicesLength = audioInputSelect.options.length;
+    if (allInputDevicesLength <= 1) {
+      console.log("No audio input devices found");
+      return;
     }
-    refreshLocalMedia();
-    console.log(audioInputSelect.innerText);
-    if (
-      audioInputSelect.options[
-        audioInputSelect.selectedIndex
-      ].innerText.includes("default") ||
-      audioInputSelect.options[
-        audioInputSelect.selectedIndex
-      ].innerText.includes("Default") ||
-      audioInputSelect.options[
-        audioInputSelect.selectedIndex
-      ].innerText.includes("Speakerphone")
-    ) {
-      document
-        .getElementById("audioOutputChangeBtn")
-        .classList.add("audioOutputChangeBtn-color");
-      console.log("add");
+
+    let currentIndex = audioInputSelect.selectedIndex;
+    currentIndex = (currentIndex + 1) % allInputDevicesLength;
+    audioInputSelect.selectedIndex = currentIndex;
+
+    // refreshLocalMedia();
+    refreshLocalMedi_only_audio();
+
+    const selectedOption = audioInputSelect.options[currentIndex];
+    console.log("----------------------------")
+    console.log(selectedOption);
+    console.log("-----------------------------");
+    const isDefaultDevice =
+      selectedOption.innerText.toLowerCase().includes("default") ||
+      selectedOption.innerText.toLowerCase().includes("speakerphone");
+
+    if (isDefaultDevice) {
+      audioOutputBtn.className = "fas fa-volume-up"
+      // audioOutputChangeBtn.classList.add("audioOutputChangeBtn-color");
     } else {
-      console.log("remove");
-      document
-        .getElementById("audioOutputChangeBtn")
-        .classList.remove("audioOutputChangeBtn-color");
+      audioOutputBtn.className = "fa-solid fa-volume-low"
+      // audioOutputChangeBtn.classList.remove("audioOutputChangeBtn-color");
     }
-    // save audio output device to localstorage
+
+    // Save audio output device to localStorage
     localStorage.setItem("audioInputSelect", audioInputSelect.value);
   });
 }
-
 /**
  * Audio mute - unmute button click event
  */
@@ -2994,14 +2950,6 @@ function addEmojiToMsg(data) {
   hideShowEmojiPicker();
 }
 
-/**
- * Set my hand button click event
- */
-function setMyHandBtn() {
-  myHandBtn.addEventListener("click", async (e) => {
-    setMyHandStatus();
-  });
-}
 
 /**
  * My settings button click event
@@ -3187,7 +3135,7 @@ function setupMySettings() {
  */
 function refreshLocalMedia() {
   // some devices can't swap the video track, if already in execution.
-  stopLocalVideoTrack();
+  // stopLocalVideoTrack();
   stopLocalAudioTrack();
 
   navigator.mediaDevices
@@ -3465,8 +3413,6 @@ function gotDevices(deviceInfos) {
       select.value = values[selectorIndex];
     }
   });
-  // let localStorageCamera = localStorage.getItem("camera") || "user";
-  // if(localStorageCamera !== "user") swapCameraTo(localStorageCamera);
 }
 
 /**
@@ -4774,24 +4720,6 @@ async function emitPeerStatus(element, status) {
     element: element,
     status: status,
   });
-}
-
-/**
- * Set my Hand Status and Icon
- */
-function setMyHandStatus() {
-  if (myHandStatus) {
-    // Raise hand
-    myHandStatus = false;
-    setTippy(myHandBtn, "Raise your hand", "right-start");
-  } else {
-    // Lower hand
-    myHandStatus = true;
-    setTippy(myHandBtn, "Lower your hand", "right-start");
-    playSound("raiseHand");
-  }
-  myHandStatusIcon.style.display = myHandStatus ? "inline" : "none";
-  emitPeerStatus("hand", myHandStatus);
 }
 
 /**
