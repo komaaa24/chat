@@ -277,7 +277,7 @@ let msgerEmojiPicker;
 let mySettings;
 let mySettingsHeader;
 let tabDevicesBtn;
-let tabBandwidthBtn;
+// let tabBandwidthBtn;
 let tabRoomBtn;
 let tabStylingBtn;
 let tabLanguagesBtn;
@@ -407,7 +407,7 @@ function getHtmlElementsById() {
   mySettings = getId("mySettings");
   mySettingsHeader = getId("mySettingsHeader");
   tabDevicesBtn = getId("tabDevicesBtn");
-  tabBandwidthBtn = getId("tabBandwidthBtn");
+  // tabBandwidthBtn = getId("tabBandwidthBtn");
   tabRoomBtn = getId("tabRoomBtn");
   tabStylingBtn = getId("tabStylingBtn");
   tabLanguagesBtn = getId("tabLanguagesBtn");
@@ -502,7 +502,7 @@ function setButtonsToolTip() {
   setTippy(myPeerNameSetBtn, "Ismni o'zgartirish", "top");
   // tab btns
   setTippy(tabDevicesBtn, "Qurilmalar", "top");
-  setTippy(tabBandwidthBtn, "Internet & Aloqa", "top");
+  // setTippy(tabBandwidthBtn, "Internet & Aloqa", "top");
   setTippy(tabRoomBtn, "Xona", "top");
   setTippy(tabStylingBtn, "Mavzu", "top");
   setTippy(tabLanguagesBtn, "Til", "top");
@@ -882,7 +882,7 @@ async function whoAreYou() {
     playSound("addPeer");
     return;
   }
-  playSound("newMessage");
+  // playSound("newMessage");
   Swal.fire({
     allowOutsideClick: false,
     allowEscapeKey: false,
@@ -995,7 +995,7 @@ async function joinToChannel() {
  */
 function welcomeUser() {
   const myRoomUrl = window.location.href;
-  playSound("newMessage");
+  // playSound("newMessage");
   Swal.fire({
     background: swalBackground,
     position: "center",
@@ -1383,7 +1383,7 @@ function handleRemovePeer(config) {
   } else {
     setTimeout(() => {
       nextPeer("leftUser");
-    }, 900);
+    }, 1000);
   }
 }
 
@@ -1392,7 +1392,7 @@ function handleNextPeer(config) {
     setTimeout(() => {
       openURL("/join/" + config.freePeer);
       console.log("no free peer found");
-    }, 900)
+    }, 1000)
   }
   else if (config.error == 'stay') {
     console.log("Stay in room");
@@ -2411,7 +2411,7 @@ function handleVideoPrivacyBtn(videoId, privacyBtnId) {
   let privacyBtn = getId(privacyBtnId);
   if (useVideo && video && privacyBtn) {
     privacyBtn.addEventListener("click", () => {
-      playSound("click");
+      // playSound("click");
       isVideoPrivacyActive = !isVideoPrivacyActive;
       setVideoPrivacyStatus(videoId, isVideoPrivacyActive);
       emitPeerStatus("privacy", isVideoPrivacyActive);
@@ -2916,7 +2916,7 @@ function setChatRoomBtn() {
 
   // chat show on message
   msgerShowChatOnMsg.addEventListener("change", (e) => {
-    playSound("click");
+    // playSound("click");
     showChatOnMessage = e.currentTarget.checked;
     if (showChatOnMessage) {
       msgPopup(
@@ -3050,9 +3050,9 @@ function setupMySettings() {
   tabDevicesBtn.addEventListener("click", (e) => {
     openTab(e, "tabDevices");
   });
-  tabBandwidthBtn.addEventListener("click", (e) => {
-    openTab(e, "tabBandwidth");
-  });
+  // tabBandwidthBtn.addEventListener("click", (e) => {
+  //   openTab(e, "tabBandwidth");
+  // });
   tabRoomBtn.addEventListener("click", (e) => {
     openTab(e, "tabRoom");
   });
@@ -3511,10 +3511,10 @@ function checkButtonsBarAndMenu() {
     isButtonsVisible = false;
   }
 
-  // check again after 10 sec if it's not mobile
+  // check again after 8 sec if it's not mobile
   setTimeout(() => {
     if (!isMobileDevice) checkButtonsBarAndMenu();
-  }, 10000);
+  }, 5000);
 }
 
 /**
@@ -3544,7 +3544,7 @@ async function shareRoomUrl() {
     !isSupportedNavigatorShare ||
     (isSupportedNavigatorShare && errorNavigatorShare)
   ) {
-    playSound("newMessage");
+    // playSound("newMessage");
     Swal.fire({
       background: swalBackground,
       position: "center",
@@ -4056,7 +4056,7 @@ function setChatRoomAndCaptionForMobile() {
  * Show msger draggable on center screen position
  */
 function showChatRoomDraggable() {
-  playSound("newMessage");
+  // playSound("newMessage");
   if (isMobileDevice) {
     buttonsBar.style.display = "none";
     isButtonsVisible = false;
@@ -4073,7 +4073,7 @@ function showChatRoomDraggable() {
  * Clean chat messages
  */
 function cleanMessages() {
-  playSound("newMessage");
+  // playSound("newMessage");
   Swal.fire({
     background: swalBackground,
     position: "center",
@@ -4604,7 +4604,7 @@ function downloadChatMsgs() {
  */
 function hideShowMySettings() {
   if (!isMySettingsVisible) {
-    playSound("newMessage");
+    // playSound("newMessage");
     // adapt it for mobile
     if (isMobileDevice) {
       document.documentElement.style.setProperty(
@@ -5182,7 +5182,7 @@ function handleRoomAction(config, emit = false) {
     };
     switch (config.action) {
       case "lock":
-        playSound("newMessage");
+        // playSound("newMessage");
         Swal.fire({
           allowOutsideClick: false,
           allowEscapeKey: false,
@@ -5429,7 +5429,7 @@ function toHtmlJson(obj) {
  * Videochat about info
  */
 function showAbout() {
-  playSound("newMessage");
+  // playSound("newMessage");
   Swal.fire({
     background: swalBackground,
     position: "center",

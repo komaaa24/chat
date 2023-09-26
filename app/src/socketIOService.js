@@ -651,7 +651,7 @@ module.exports = class SocketIOService {
           freePeer: secondChannel,
         });
       }
-    }, 40000);
+    }, 20000);
     return available;
   }
 };
