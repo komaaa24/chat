@@ -2758,7 +2758,7 @@ function setAudioOutputBtn() {
     const selectedOption = audioInputSelect.options[currentIndex];
     const deviceType = identifyDevice(selectedOption.innerText);
 
-    logger("Audio input select ", audioInputSelect.options);
+    logger("Audio input select options ", audioInputSelect.options);
 
     logger("Device type ", deviceType);
 
