@@ -70,6 +70,7 @@
     <link rel="stylesheet" href="../css/client.css" />
     <link rel="stylesheet" href="../css/videoGrid.css" />
     <link rel="stylesheet" href="../css/newcall.css" />
+    <link rel="stylesheet" href="../css/speakerOptionPopup.css" />
 
     <!-- https://cdnjs.com/libraries/font-awesome -->
 
@@ -260,9 +261,9 @@
       <header id="mySettingsHeader">
         <button id="mySettingsCloseBtn" class="fas fa-times"></button>
       </header>
-      <main>
+      <main id="settings_main">
         <br />
-        <div class="tab">
+        <div class="tab" id="tab">
           <button id="tabDevicesBtn" class="fas fa-cog tablinks"></button>
           <!-- <button id="tabBandwidthBtn" class="fas fa-wifi tablinks"></button> -->
           <button id="tabRoomBtn" class="fas fa-home tablinks"></button>
@@ -272,17 +273,17 @@
 
         <div id="tabDevices" class="tabcontent">
           <br />
-          <div>
+          <div id="cameraChangeBtn">
             <label for="videoSource">Kamera</label><br />
             <select id="videoSource"></select>
           </div>
           <br />
-          <div>
-            <label for="audioSource">Mikrofon</label><br />
+          <div id="audioDevices">
+            <label for="audioSource">Audio Devices</label><br />
             <select id="audioSource"></select>
           </div>
           <br />
-          <div>
+          <div id="speakerChangeBtn">
             <label for="audioOutput">Speaker</label><br />
             <select id="audioOutput"></select>
           </div>

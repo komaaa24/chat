@@ -1649,8 +1649,10 @@ function enumerateAudioDevices(stream) {
     .then((devices) => {
       devices.forEach((device) => {
         let el = null;
+        let speakerElement = null;
         if ("audioinput" === device.kind) {
           el = getId("audioSource");
+          speakerElement = getId("audioOptions");
         } else if ("audiooutput" === device.kind) {
           console.log(device.kind, device.label);
           el = getId("audioOutput");
@@ -1658,6 +1660,7 @@ function enumerateAudioDevices(stream) {
         }
         if (!el) return;
         addChild(device, el, device.kind);
+        if (speakerElement) addChildSpeaker(device, speakerElement, device.kind);
       });
     })
     .then(() => {
@@ -1666,7 +1669,6 @@ function enumerateAudioDevices(stream) {
       getId("audioOutput").disabled = !("sinkId" in HTMLMediaElement.prototype);
     });
 }
-
 /**
  * Enumerate Video
  * @param {object} stream
@@ -1729,6 +1731,46 @@ function addChild(device, el, kind) {
     getId("audioOutput"),
     getId("videoSource"),
   ];
+}
+
+function addChildSpeaker(device, el, kind) {
+  const option = document.createElement("button");
+  option.value = device.deviceId;
+  switch (kind) {
+    case "videoinput":
+      option.textContent = `📹 ` + device.label || `📹 camera ${el.length + 1}`;
+      break;
+    case "audioinput":
+      option.textContent = `🎤 ` + device.label || `🎤 microphone ${el.length + 1}`;
+      break;
+    case "audiooutput":
+      option.textContent = `🔈 ` + device.label || `🔈 speaker ${el.length + 1}`;
+      break;
+  }
+  el.appendChild(option);
+  selectors = [
+    getId("audioSource"),
+    getId("audioOutput"),
+    getId("videoSource"),
+  ];
+}
+
+
+function changeSettingsParam(speakerSettings) {
+  if (speakerSettings) {
+    tabRoomBtn.style.display = "inline";
+    tabDevicesBtn.style.display = "inline";
+    getId("cameraChangeBtn").style.display = "inline";
+    getId("speakerChangeBtn").style.display = "inline";
+    getId("tab").style.display = "inline";
+
+  } else {
+    tabRoomBtn.style.display = "none";
+    tabDevicesBtn.style.display = "none";
+    getId("cameraChangeBtn").style.display = "none";
+    getId("speakerChangeBtn").style.display = "none";
+    getId("tab").style.display = "inline";
+  }
 }
 
 /**
@@ -2735,6 +2777,65 @@ function identifyDevice(device) {
   return audioDevices.default;
 }
 
+const audioSourceHtml = `
+<div id="audioDeviceOptions">
+  <label for="audioSource">Audio Devices</label><br />
+  <select id="audioSource">
+  <option value="option1">headset</option>
+  <option value="option2">speaker</option>
+  <option value="option3">bluetooth</option>
+  </select>
+</div>
+`;
+const container = document.createElement('div');
+container.innerHTML = audioSourceHtml;
+container.style.display = 'none';
+document.body.appendChild(container);
+
+function showAudioDevices() {
+  if (!isMySettingsVisible) {
+    isMySettingsVisible = true;
+  }
+  let isOpen = localStorage.getItem("speakerOptionBtn");
+  if (isOpen == "true") {
+    isOpen = false;
+  } else {
+    isOpen = true;
+  }
+  localStorage.setItem("speakerOptionBtn", isOpen);
+  const audioDevices = getId("audioDevices");
+  const select = getId("audioSource");
+  logger("Is open", isOpen)
+  container.style.display = isOpen ? "none" : 'block';
+}
+
+
+function hideShowSpeakerSettings() {
+  let isMobile = false;
+  if (!isMySettingsVisible) {
+    if (isMobileDevice) {
+
+      document.documentElement.style.setProperty(
+        "--mySettings-select-w",
+        "99%"
+      );
+      isMobile = true;
+    }
+    localStorage.setItem("speakerSettings", true);
+    changeSettingsParam(false);
+
+    // center screen on show
+    isMobile ? mySettings.style.top = "80%" : mySettings.style.top = "50%";
+    mySettings.style.left = "50%";
+    mySettings.style.display = "block";
+    isMySettingsVisible = true;
+    return;
+  }
+  mySettings.style.display = "none";
+  isMySettingsVisible = false;
+}
+
+
 /**
  * audio output device change
  */
@@ -2743,35 +2844,39 @@ function identifyDevice(device) {
 function setAudioOutputBtn() {
   audioOutputChangeBtn.addEventListener("click", async (e) => {
 
-    let allInputDevicesLength = audioInputSelect.options.length;
-
-    logger("All input devices ", audioInputSelect.options)
-    if (allInputDevicesLength == 1) {
-      return console.log("No audio input devices found");
-    }
+    // hideShowSpeakerSettings();
+    showAudioDevices();
 
 
-    let currentIndex = audioInputSelect.selectedIndex;
-    currentIndex = (currentIndex + 1) % allInputDevicesLength;
-    audioInputSelect.selectedIndex = currentIndex;
+    // let allInputDevicesLength = audioInputSelect.options.length;
 
-    const selectedOption = audioInputSelect.options[currentIndex];
-    const deviceType = identifyDevice(selectedOption.innerText);
+    // logger("All input devices ", audioInputSelect.options)
+    // if (allInputDevicesLength == 1) {
+    //   return console.log("No audio input devices found");
+    // }
 
-    logger("Audio input select ", audioInputSelect.options);
 
-    logger("Device type ", deviceType);
+    // let currentIndex = audioInputSelect.selectedIndex;
+    // currentIndex = (currentIndex + 1) % allInputDevicesLength;
+    // audioInputSelect.selectedIndex = currentIndex;
 
-    refreshLocalMedia_only_audio();
+    // const selectedOption = audioInputSelect.options[currentIndex];
+    // const deviceType = identifyDevice(selectedOption.innerText);
 
-    updateVolumeIcon(deviceType);
+    // logger("Audio input select ", audioInputSelect.options);
 
-    localStorage.setItem("volumeIcon", deviceType);
+    // logger("Device type ", deviceType);
 
-    // save audio output device to localstorage
-    localStorage.setItem("audioInputSelect", audioInputSelect.value);
+    // refreshLocalMedia_only_audio();
 
-    return;
+    // updateVolumeIcon(deviceType);
+
+    // localStorage.setItem("volumeIcon", deviceType);
+
+    // // save audio output device to localstorage
+    // localStorage.setItem("audioInputSelect", audioInputSelect.value);
+
+    // return;
 
   });
 }
@@ -4611,6 +4716,7 @@ function hideShowMySettings() {
         "99%"
       );
     }
+    changeSettingsParam(true);
     // my current peer name
     myPeerNameSet.placeholder =
       myPeerName || window.localStorage.getItem("peer_name");
