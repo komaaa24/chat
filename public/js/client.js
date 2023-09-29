@@ -1652,11 +1652,10 @@ function enumerateAudioDevices(stream) {
         let speakerElement = null;
         if ("audioinput" === device.kind) {
           el = getId("audioSource");
-          speakerElement = getId("audioOptions");
+          speakerElement = getId("audioDeviceOptions");
         } else if ("audiooutput" === device.kind) {
           console.log(device.kind, device.label);
           el = getId("audioOutput");
-          console.log(el);
         }
         if (!el) return;
         addChild(device, el, device.kind);
@@ -1714,11 +1713,17 @@ function stopTracks(stream) {
 function addChild(device, el, kind) {
   const option = document.createElement("option");
   option.value = device.deviceId;
+  let isRussian = device.label == 'По умолчанию';
+  let deviceType = identifyDevice(device.label);
   switch (kind) {
     case "videoinput":
       option.text = `📹 ` + device.label || `📹 camera ${el.length + 1}`;
       break;
     case "audioinput":
+      if (isRussian || deviceType == audioDevices.default) {
+        option.text = `🔈 Default`;
+        break;
+      }
       option.text = `🎤 ` + device.label || `🎤 microphone ${el.length + 1}`;
       break;
     case "audiooutput":
@@ -1736,15 +1741,23 @@ function addChild(device, el, kind) {
 function addChildSpeaker(device, el, kind) {
   const option = document.createElement("button");
   option.value = device.deviceId;
-  switch (kind) {
-    case "videoinput":
-      option.textContent = `📹 ` + device.label || `📹 camera ${el.length + 1}`;
+  option.classList.add("audioOptionBtn");
+  const deviceType = identifyDevice(device.label);
+  switch (deviceType) {
+    case audioDevices.bluetooth:
+      option.textContent = `ᛒ ` + device.label || `📹 camera ${el.length + 1}`;
       break;
-    case "audioinput":
-      option.textContent = `🎤 ` + device.label || `🎤 microphone ${el.length + 1}`;
+    case audioDevices.earpiece:
+      option.textContent = `📞 ` + device.label || `📹 camera ${el.length + 1}`;
       break;
-    case "audiooutput":
-      option.textContent = `🔈 ` + device.label || `🔈 speaker ${el.length + 1}`;
+    case audioDevices.default:
+      option.textContent = `🔈 Default` || `🎤 microphone ${el.length + 1}`;
+      break;
+    case audioDevices.wired:
+      option.textContent = `🎧 ` + device.label || `🔈 speaker ${el.length + 1}`;
+      break;
+    case audioDevices.speakerphone:
+      option.textContent = `🔊 ` + device.label || `🔈 speaker ${el.length + 1}`;
       break;
   }
   el.appendChild(option);
@@ -1756,15 +1769,57 @@ function addChildSpeaker(device, el, kind) {
 }
 
 
+function handleAudioDeviceBtn() {
+  const audioDevicesBtns = document.querySelectorAll(".audioOptionBtn");
+  audioDevicesBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      let allInputDevicesLength = audioInputSelect.options.length;
+
+      // logger("All input devices ", audioInputSelect.options);
+      if (allInputDevicesLength == 1) {
+        return console.log("No audio input devices found");
+      }
+
+      let currentIndex = audioInputSelect.selectedIndex;
+
+      let pressedBtn = identifyDevice(btn.textContent);
+      for (let i = 0; i < audioInputSelect.options.length; i++) {
+        let str = audioInputSelect.options[i].text;
+        let deviceType = identifyDevice(str);
+        if (deviceType == pressedBtn) {
+          currentIndex = i;
+        }
+      }
+      audioInputSelect.selectedIndex = currentIndex;
+
+      const selectedOption = audioInputSelect.options[currentIndex];
+      const deviceType = identifyDevice(selectedOption.innerText);
+
+      refreshLocalMedia_only_audio();
+
+      updateVolumeIcon(deviceType);
+
+      localStorage.setItem("volumeIcon", deviceType);
+
+      // save audio output device to localstorage
+      localStorage.setItem("audioInputSelect", audioInputSelect.value);
+
+      return;
+    })
+  })
+}
+
 function changeSettingsParam(speakerSettings) {
+  let br = document.getElementsByClassName("br");
   if (speakerSettings) {
     tabRoomBtn.style.display = "inline";
     tabDevicesBtn.style.display = "inline";
     getId("cameraChangeBtn").style.display = "inline";
     getId("speakerChangeBtn").style.display = "inline";
     getId("tab").style.display = "inline";
-
+    br.style.display = "inline";
   } else {
+    br.style.display = "none";
     tabRoomBtn.style.display = "none";
     tabDevicesBtn.style.display = "none";
     getId("cameraChangeBtn").style.display = "none";
@@ -2729,7 +2784,7 @@ function setShareRoomBtn() {
 function refreshLocalMedia_only_audio() {
   stopLocalAudioTrack();
   navigator.mediaDevices
-    .getUserMedia({ audio: true }) // Запрашиваем только аудио
+    .getUserMedia(getAudioVideoConstraints()) // Запрашиваем только аудио
     .then(gotStream)
     .then(gotDevices)
     .catch(handleError);
@@ -2749,9 +2804,9 @@ function updateVolumeIcon(deviceType) {
     audioOutputBtn.className = "fa-solid fa-headphones"
   }
   else if (deviceType == audioDevices.earpiece) {
-    audioOutputBtn.className = 'fa-solid fa-volume-low';
+    audioOutputBtn.className = 'fa-solid fa-phone';
   } else {
-    audioOutputBtn.className = 'lni lni-volume-medium';
+    audioOutputBtn.className = 'fa-solid fa-volume-low';
   }
 
 }
@@ -2779,12 +2834,9 @@ function identifyDevice(device) {
 
 const audioSourceHtml = `
 <div id="audioDeviceOptions">
-  <label for="audioSource">Audio Devices</label><br />
-  <select id="audioSource">
-  <option value="option1">headset</option>
-  <option value="option2">speaker</option>
-  <option value="option3">bluetooth</option>
-  </select>
+    <label for="audioSource">Audio Devices</label>
+    <div class="device-buttons">
+    </div>
 </div>
 `;
 const container = document.createElement('div');
@@ -2797,44 +2849,15 @@ function showAudioDevices() {
     isMySettingsVisible = true;
   }
   let isOpen = localStorage.getItem("speakerOptionBtn");
-  if (isOpen == "true") {
-    isOpen = false;
-  } else {
+  if (isOpen == "false" || !isOpen) {
     isOpen = true;
+  } else {
+    isOpen = false;
   }
   localStorage.setItem("speakerOptionBtn", isOpen);
-  const audioDevices = getId("audioDevices");
-  const select = getId("audioSource");
   logger("Is open", isOpen)
   container.style.display = isOpen ? "none" : 'block';
 }
-
-
-function hideShowSpeakerSettings() {
-  let isMobile = false;
-  if (!isMySettingsVisible) {
-    if (isMobileDevice) {
-
-      document.documentElement.style.setProperty(
-        "--mySettings-select-w",
-        "99%"
-      );
-      isMobile = true;
-    }
-    localStorage.setItem("speakerSettings", true);
-    changeSettingsParam(false);
-
-    // center screen on show
-    isMobile ? mySettings.style.top = "80%" : mySettings.style.top = "50%";
-    mySettings.style.left = "50%";
-    mySettings.style.display = "block";
-    isMySettingsVisible = true;
-    return;
-  }
-  mySettings.style.display = "none";
-  isMySettingsVisible = false;
-}
-
 
 /**
  * audio output device change
@@ -2843,40 +2866,8 @@ function hideShowSpeakerSettings() {
 
 function setAudioOutputBtn() {
   audioOutputChangeBtn.addEventListener("click", async (e) => {
-
-    // hideShowSpeakerSettings();
     showAudioDevices();
-
-
-    // let allInputDevicesLength = audioInputSelect.options.length;
-
-    // logger("All input devices ", audioInputSelect.options)
-    // if (allInputDevicesLength == 1) {
-    //   return console.log("No audio input devices found");
-    // }
-
-
-    // let currentIndex = audioInputSelect.selectedIndex;
-    // currentIndex = (currentIndex + 1) % allInputDevicesLength;
-    // audioInputSelect.selectedIndex = currentIndex;
-
-    // const selectedOption = audioInputSelect.options[currentIndex];
-    // const deviceType = identifyDevice(selectedOption.innerText);
-
-    // logger("Audio input select ", audioInputSelect.options);
-
-    // logger("Device type ", deviceType);
-
-    // refreshLocalMedia_only_audio();
-
-    // updateVolumeIcon(deviceType);
-
-    // localStorage.setItem("volumeIcon", deviceType);
-
-    // // save audio output device to localstorage
-    // localStorage.setItem("audioInputSelect", audioInputSelect.value);
-
-    // return;
+    handleAudioDeviceBtn();
 
   });
 }
@@ -3500,34 +3491,33 @@ function gotDevices(deviceInfos) {
   // check devices
   for (let i = 0; i !== deviceInfos.length; ++i) {
     const deviceInfo = deviceInfos[i];
-    console.log("device-info ------> ", deviceInfo);
     const option = document.createElement("option");
     option.value = deviceInfo.deviceId;
+    let isRussian = deviceInfo.label == "По умолчанию";
     switch (deviceInfo.kind) {
       case "videoinput":
         option.text =
           `📹 ` + deviceInfo.label || `📹 camera ${videoSelect.length + 1}`;
         videoSelect.appendChild(option);
         break;
-
       case "audioinput":
-        option.text =
-          `🎤 ` + deviceInfo.label ||
-          `🎤 microphone ${audioInputSelect.length + 1}`;
+        if (isRussian) {
+          option.text = `🎤 Default`;
+        } else {
+          option.text = `🎤 ` + deviceInfo.label || `🎤 microphone ${audioInputSelect.length + 1}`;
+        }
         audioInputSelect.appendChild(option);
         break;
-
       case "audiooutput":
         option.text =
           `🔈 ` + deviceInfo.label ||
           `🔈 speaker ${audioOutputSelect.length + 1}`;
         audioOutputSelect.appendChild(option);
         break;
-
       default:
         console.log("Some other kind of source/device: ", deviceInfo);
     }
-  } // end for devices
+  }
 
   selectors.forEach((select, selectorIndex) => {
     if (
@@ -4716,11 +4706,11 @@ function hideShowMySettings() {
         "99%"
       );
     }
-    changeSettingsParam(true);
     // my current peer name
     myPeerNameSet.placeholder =
       myPeerName || window.localStorage.getItem("peer_name");
     // center screen on show
+    getId("cameraChangeBtn").style.display = "none";
     mySettings.style.top = "50%";
     mySettings.style.left = "50%";
     mySettings.style.display = "block";

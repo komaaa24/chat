@@ -16,6 +16,10 @@ const log = new Logs("server");
 
 router.use(blockMiddleware);
 
+router.get("/speaker", (req, res, next) => {
+  return res.sendFile(config.views.speaker);
+})
+
 // router.get("/stream", (req, res, next) => {
 //   res.sendFile(config.views.stream);
 // });
