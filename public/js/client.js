@@ -284,7 +284,7 @@ let tabLanguagesBtn;
 let mySettingsCloseBtn;
 let myPeerNameSet;
 let myPeerNameSetBtn;
-let switchSounds;
+// let switchSounds;
 let audioInputSelect;
 let audioOutputSelect;
 let videoSelect;
@@ -414,7 +414,7 @@ function getHtmlElementsById() {
   mySettingsCloseBtn = getId("mySettingsCloseBtn");
   myPeerNameSet = getId("myPeerNameSet");
   myPeerNameSetBtn = getId("myPeerNameSetBtn");
-  switchSounds = getId("switchSounds");
+  // switchSounds = getId("switchSounds");
   audioInputSelect = getId("audioSource");
   audioOutputSelect = getId("audioOutput");
   videoSelect = getId("videoSource");
@@ -2834,7 +2834,6 @@ container.style.display = 'none';
 document.body.appendChild(container);
 
 function showAudioDevices(isOpen) {
-
   if (!isMySettingsVisible) {
     isMySettingsVisible = true;
   }
@@ -2847,27 +2846,14 @@ function showAudioDevices(isOpen) {
   if (isOpen == "false") {
     hideShowMySettings();
   }
+  isMySettingsVisible = false;
   container.style.display = isOpen == "true" ? "none" : 'flex';
   getId("audioDeviceOptions").style.display = isOpen == "true" ? "none" : "flex";
-
-
 }
-
-
-// function hideDeviceOptions(isOpen) {
-//   if (isOpen == "false") {
-//     isOpen = true;
-//   } else {
-//     isOpen = false;
-//   }
-//   localStorage.setItem("speakerOptionBtn", isOpen);
-//   container.style.display = isOpen ? "none" : 'block';
-// }
 
 /**
  * audio output device change
  */
-
 
 function setAudioOutputBtn() {
   audioOutputChangeBtn.addEventListener("click", async (e) => {
@@ -3077,6 +3063,7 @@ function addEmojiToMsg(data) {
  */
 function setMySettingsBtn() {
   mySettingsBtn.addEventListener("click", (e) => {
+
     if (isMobileDevice) {
       buttonsBar.style.display = "none";
       isButtonsVisible = false;
@@ -3090,9 +3077,9 @@ function setMySettingsBtn() {
     updateMyPeerName();
   });
   // Sounds
-  switchSounds.addEventListener("change", (e) => {
-    notifyBySound = e.currentTarget.checked;
-  });
+  // switchSounds.addEventListener("change", (e) => {
+  //   notifyBySound = e.currentTarget.checked;
+  // });
 
   // make chat room draggable for desktop
   if (!isMobileDevice) dragElement(mySettings, mySettingsHeader);
@@ -4701,6 +4688,7 @@ function downloadChatMsgs() {
  * Hide - show my settings
  */
 function hideShowMySettings() {
+  logger("Is my settings visible ", isMySettingsVisible);
   if (!isMySettingsVisible) {
     if (isMobileDevice) {
       document.documentElement.style.setProperty(
@@ -5779,5 +5767,3 @@ function logger(msg, log) {
     log: log
   })
 }
-
-
