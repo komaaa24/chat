@@ -3065,10 +3065,10 @@ function addEmojiToMsg(data) {
  */
 function setMySettingsBtn() {
   mySettingsBtn.addEventListener("click", (e) => {
-    if (isMobileDevice) {
-      buttonsBar.style.display = "none";
-      isButtonsVisible = false;
-    }
+    // if (isMobileDevice) {
+    //   buttonsBar.style.display = "none";
+    //   isButtonsVisible = false;
+    // }
     hideShowMySettings();
   });
   mySettingsCloseBtn.addEventListener("click", (e) => {
