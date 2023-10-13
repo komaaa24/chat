@@ -877,7 +877,7 @@ async function whoAreYou() {
     playSound("addPeer");
     return;
   }
-  // playSound("newMessage");
+
   Swal.fire({
     allowOutsideClick: false,
     allowEscapeKey: false,
@@ -907,7 +907,7 @@ async function whoAreYou() {
       whoAreYouJoin();
     },
   }).then(() => {
-    playSound("addPeer");
+    // playSound("addPeer");
   });
   joiningPart2();
 }
@@ -1179,9 +1179,6 @@ async function handleOnTrack(peer_id, peers) {
 async function handleAddTracks(peer_id) {
   let peer_name = allPeers[peer_id]["peer_name"];
   await localMediaStream.getTracks().forEach((track) => {
-    console.log(
-      "[ADD TRACK] to Peer Name [" + peer_name + "] kind - " + track.kind
-    );
     peerConnections[peer_id].addTrack(track, localMediaStream);
   });
 }
@@ -1826,11 +1823,6 @@ async function setupLocalMedia() {
   }
   await getPeerGeoLocation();
   await getAllUsersAmount();
-  console.log("08. Requesting access to local audio - video inputs");
-  console.log(
-    "09. Supported constraints",
-    navigator.mediaDevices.getSupportedConstraints()
-  );
 
   // default | qvgaVideo | vgaVideo | hdVideo | fhdVideo | 2kVideo | 4kVideo |
   let videoConstraints = useVideo ? getVideoConstraints("default") : false;
@@ -3718,8 +3710,6 @@ function shareRoomByEmail(message) {
  */
 function handleAudio(e, init, force = null) {
   if (!useAudio) return;
-  // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream/getAudioTracks
-
   localMediaStream.getAudioTracks()[0].enabled =
     force != null ? force : !localMediaStream.getAudioTracks()[0].enabled;
   myAudioStatus = localMediaStream.getAudioTracks()[0].enabled;
