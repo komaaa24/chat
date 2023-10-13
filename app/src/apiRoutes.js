@@ -12,6 +12,9 @@ const path = require("path");
 const ENV_PATH = path.resolve(__dirname, "../../.env");
 dotenv.config({ path: ENV_PATH });
 
+const smsURL = "http://81.95.228.2:8080/sms_send.php";
+
+
 const log = new Logs("server");
 
 router.use(blockMiddleware);
@@ -19,6 +22,30 @@ router.use(blockMiddleware);
 router.get("/speaker", (req, res, next) => {
   return res.sendFile(config.views.speaker);
 })
+
+router.get("/sendsms", async (req, res, next) => {
+  const { msisdn, body } = req.query;
+  if (!body || !msisdn) {
+    return res.status(403).json({ "error": true });
+  }
+  const url = `${smsURL}?action=sms&msisdn=${msisdn}`;
+  const result = await fetch(url, { method: "GET" });
+
+  return res.status(200).send(result);
+
+});
+
+router.get("/userinfo", async (req, res, next) => {
+  const { action, msisdn } = req.query;
+  const url = `${smsURL}?action=${infoType}&msisdn=${phone}`;
+  const result = await fetch(url, { method: "GET" });
+  return res.status(200).send(result);
+});
+
+
+
+
+
 
 // router.get("/stream", (req, res, next) => {
 //   res.sendFile(config.views.stream);
