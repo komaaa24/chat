@@ -61,11 +61,6 @@ app.use(sessions({
   resave: false
 }))
 
-app.use((req, res, next) => {
-  console.log(req);
-  next();
-})
-
 
 
 

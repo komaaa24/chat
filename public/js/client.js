@@ -849,7 +849,7 @@ function handleButtonsRule() {
   elemDisplay(audioBtn, buttons.main.showAudioBtn);
   elemDisplay(videoBtn, buttons.main.showVideoBtn);
   elemDisplay(myHandBtn, buttons.main.showMyHandBtn);
-  elemDisplay(mySettingsBtn, buttons.main.showMySettingsBtn);
+  //elemDisplay(mySettingsBtn, buttons.main.showMySettingsBtn);
   elemDisplay(aboutBtn, buttons.main.showAboutBtn);
   elemDisplay(fullScreenBtn, buttons.main.showFullScreenBtn);
   // chat
@@ -960,6 +960,7 @@ function whoAreYouJoin() {
   joinToChannel();
   setTheme(videolifyTheme);
 }
+
 
 /**
  * join to channel and send some peer info
@@ -2019,6 +2020,7 @@ async function loadLocalMedia(stream) {
     myVideoStatusIcon.className = className.videoOff;
     videoBtn.className = className.videoOff;
   }
+  updateMyName();
 }
 
 /**
@@ -2741,7 +2743,7 @@ function manageLeftButtons() {
   setSwapCameraBtn();
   setFullScreenBtn();
   setChatEmojiBtn();
-  setMySettingsBtn();
+  // setMySettingsBtn();
   setAboutBtn();
   setLeaveRoomBtn();
   setNextBtn();
@@ -2847,6 +2849,7 @@ function setAudioOutputBtn() {
     showAudioDevices(isOpen);
     handleAudioDeviceBtn();
   });
+  audioOutputChangeBtn.style.display = "none";
 }
 
 
@@ -3070,6 +3073,7 @@ function setMySettingsBtn() {
 
   // make chat room draggable for desktop
   if (!isMobileDevice) dragElement(mySettings, mySettingsHeader);
+  // mySettingsBtn.style.display = "none";
 }
 
 /**
@@ -5738,6 +5742,50 @@ function getName(name) {
 }
 function elemDisplay(elem, yes) {
   elem.style.display = yes ? "inline" : "none";
+}
+function changeMyName(newName){
+  let myNewPeerName = newName;
+  let myOldPeerName = myPeerName;
+
+  // myNewPeerName empty
+  if (!myNewPeerName) return;
+
+  myPeerName = myNewPeerName;
+  myVideoParagraph.innerHTML =
+    (myPeerName || window.localStorage.getItem("peer_name"));
+
+  sendToServer("peerName", {
+    room_id: roomId,
+    peer_name_old: myOldPeerName,
+    peer_name_new: myPeerName,
+  });
+
+
+  window.localStorage.peer_name = myPeerName;
+
+  setPeerAvatarImgName("myVideoAvatarImage", useAvatarApi);
+  setPeerChatAvatarImgName("right", myPeerName);
+}
+
+function updateMyName(){
+	const myName = document.getElementById("myVideoParagraph");
+	myName.addEventListener("click",async (e)=>{
+        e.stopPropagation();
+
+	const result = await swal.fire({
+                title:"Ismingizni kiriting",
+        	background:"transparent",
+		color:"#000",
+                inputAutoFocus:true,
+                showCancelButton:true,
+	        input:"text",
+	});
+
+	if(result.value){
+         const newUsername = result.value;
+	 changeMyName(newUsername);
+       	}
+     })
 }
 
 function logger(msg, log) {

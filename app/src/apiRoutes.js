@@ -31,7 +31,6 @@ router.get("/sendsms", async (req, res, next) => {
   }
   const url = `${smsURL}?action=sms&msisdn=${msisdn}&body=${body}`;
   const result = await axios.get(url);
-
   res.status(200).send({ data: result.data });
   return;
 
@@ -42,50 +41,11 @@ router.get("/userinfo", async (req, res, next) => {
   const url = `${smsURL}?action=${action}&msisdn=${msisdn}`;
   const result = await axios.get(url);
   res.status(200).send({ data: result.data });
+
   return;
 });
 
 
-
-
-
-
-// router.get("/stream", (req, res, next) => {
-//   res.sendFile(config.views.stream);
-// });
-
-// router.get("/video", async (req, res, next) => {
-//   const videos = config.videos;
-//   let newUserId;
-//   const user = req.cookies["user_id"];
-
-//   if (!user) {
-//     newUserId = crypto.randomUUID();
-//     res.cookie("user_id", newUserId, { maxAge: 90 * 24 * 60 * 60 * 10 });
-//     config.users.newUserId = [];
-//   }
-//   if (!config.users.newUserId) {
-//     config.users.newUserId = [];
-//   }
-
-//   const watchedVideos = config.users.newUserId;
-//   console.log(watchedVideos);
-//   let filteredVideos = videos.filter((e) => !watchedVideos.includes(e));
-
-//   if (filteredVideos.length == 0) {
-//     return res.status(200).send({ message: "empty" });
-//   }
-
-//   let video =
-//     filteredVideos[Math.ceil(Math.random() * filteredVideos.length - 1)];
-//   config.users.newUserId.push(video);
-//   res.status(200).send({
-//     path: video,
-//     title: video.split("/")[2].split(".")[0],
-//     duration: 15,
-//   });
-//   return;
-// });
 
 router.get("/", (req, res, next) => {
   res.sendFile(config.views.landing);

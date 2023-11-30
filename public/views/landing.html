@@ -130,7 +130,7 @@
                       data-reveal-delay="150"
                     >
                       Videochat.uz <br />
-                      Bepul online real-vaqt video muloqot
+                      Online real-vaqt video muloqot
                       <br />
                       Oddiy, tez va xavfsiz.
                     </h1>
@@ -213,6 +213,7 @@
         let validPhone = validatePhone(phone);
         if (!validPhone || !phone) {
           swal.fire("Telefon raqami yo'q yoki hato");
+	  return;
         }
 
         let userOperator = clarifyUserOperator(validPhone);
@@ -222,13 +223,12 @@
           return;
         }
         const userStatus = await getUserInfo(validPhone, "status");
-        console.log(userStatus);
         if (userStatus == "1") {
           findPeer();
           return;
         }
 
-        if (userStatus == "0" || userStatus == "1") {
+        if (userStatus == "0" || userStatus == "2") {
           const generatedCode = generateCode();
           const smsStatus = await sendSMSCode(validPhone, generatedCode);
           const code = await getCode();
