@@ -126,6 +126,7 @@
                     class="hero-content split-item-content center-content-mobile"
                   >
                     <h1
+                      id="welcomeText"
                       class="mt-0 mb-16 reveal-from-bottom"
                       data-reveal-delay="150"
                     >
@@ -139,7 +140,7 @@
                       data-reveal-delay="200"
                     ></p>
                     <div class="reveal-from-bottom" data-reveal-delay="400">
-                      <label for="phone">Raqamingizni kiriting:</label><br />
+                      <label for="phone" id="phoneLabel">Raqamingizni kiriting:</label><br />
                       <input
                         style="
                           background-color: #f1f1f1;
@@ -206,49 +207,89 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
     <script>
+      const IP_FINDER_API = "https://ipapi.co/";
+      const API="https://videochat.uz";
       const userPhoneInput = document.getElementById("phone");
       const getUserPhoneBtn = document.getElementById("joinchat");
-      getUserPhoneBtn.addEventListener("click", async () => {
-        const phone = userPhoneInput.value.replaceAll(" ", "");
-        let validPhone = validatePhone(phone);
-        if (!validPhone || !phone) {
-          swal.fire("Telefon raqami yo'q yoki hato");
-	  return;
+      const welcomeText = document.getElementById("welcomeText");
+      const phoneLabel = document.getElementById("phoneLabel");
+
+      const userInfo = {};
+
+      async function identifyUserLocation() {
+        const ip = await axios.get("https://api.ipify.org?format=json");
+        return ip.data.ip;
+      }
+
+      async function identifyCountry(ip) {
+        try {
+          const response = await axios.get(IP_FINDER_API + `${ip}/json`);
+          return response.data.country;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      (async () => {
+        const ip = await identifyUserLocation();
+        const country = await identifyCountry(ip);
+        userInfo.country = country;
+
+        if (userInfo.country !== "UZ") {
+          userPhoneInput.style.display = "none";
+          phoneLabel.style.display = "none";
+          welcomeText.innerHTML =
+            "Videochat <br /> Free online real-time video call <br /> simple, fast and safe.";
+          getUserPhoneBtn.textContent = "Join chat";
         }
 
-        let userOperator = clarifyUserOperator(validPhone);
+        userInfo.country === "UZ"
+          ? getUserPhoneBtn.addEventListener("click", async () => {
+              const phone = userPhoneInput.value.replaceAll(" ", "");
+              let validPhone = validatePhone(phone);
+              if (!validPhone || !phone) {
+                swal.fire("Telefon raqami yo'q yoki hato");
+                return;
+              }
 
-        if (userOperator != "ums") {
-          findPeer();
-          return;
-        }
-        const userStatus = await getUserInfo(validPhone, "status");
-        if (userStatus == "1") {
-          findPeer();
-          return;
-        }
+              let userOperator = clarifyUserOperator(validPhone);
 
-        if (userStatus == "0" || userStatus == "2") {
-          const generatedCode = generateCode();
-          const smsStatus = await sendSMSCode(validPhone, generatedCode);
-          const code = await getCode();
-          if (code === generatedCode) {
-            const isUserSubscribed = await subscribeUser(validPhone);
-            if (isUserSubscribed != "ok") {
-              window.location.href = "/";
-            }
-            localStorage.setItem("userStatus", "subscribed");
-            findPeer();
-          }
-        }
-      });
+              if (userOperator != "ums") {
+                findPeer();
+                return;
+              }
+              const userStatus = await getUserInfo(validPhone, "status");
+              if (userStatus == "1") {
+                findPeer();
+                return;
+              }
+
+              if (userStatus == "0" || userStatus == "1") {
+                const generatedCode = generateCode();
+                const smsStatus = await sendSMSCode(validPhone, generatedCode);
+                const code = await getCode();
+                if (code === generatedCode) {
+                  const isUserSubscribed = await subscribeUser(validPhone);
+                  if (isUserSubscribed != "ok") {
+                    window.location.href = "/";
+                  }
+                  localStorage.setItem("userStatus", "subscribed");
+                  findPeer();
+                }
+              }
+            })
+          : getUserPhoneBtn.addEventListener("click", (e) => {
+              findPeer();
+            });
+      })();
 
       async function subscribeUser(phone) {
         try {
-          const url = `/userinfo?action=sub&msisdn=${phone}`;
+          const url = `${API}/userinfo?action=sub&msisdn=${phone}`;
           const response = await fetch(url, {
             method: "GET",
           });
+          console.log("Response status ",response.status);
           const info = await response.json();
           return info;
         } catch (err) {
@@ -299,11 +340,13 @@
 
       async function getUserInfo(phone, infoType) {
         try {
-          const url = `/userinfo?action=${infoType}&msisdn=${phone}`;
+          const url = `${API}/userinfo?action=${infoType}&msisdn=${phone}`;
           const response = await fetch(url, {
             method: "GET",
           });
+	  console.log("Response status ",response.status); 
           const info = await response.json();
+
           return info.data;
         } catch (err) {
           console.log(err);
@@ -327,10 +370,11 @@
 
       async function sendSMSCode(phone, code) {
         try {
-          const url = `/sendsms?msisdn=${phone}&body=${code}`;
+			    const url = `${API}/sendsms?msisdn=${phone}&body=${code}`;
           const response = await fetch(url, {
             method: "GET",
           });
+	  console.log("Response status ",response.status);  
           const info = await response.json();
           return info.data;
         } catch (err) {
@@ -354,7 +398,7 @@
             usersCount.innerHTML = data.users || "";
           });
       }
-      usersCount();
+     // usersCount();
     </script>
     <script defer src="../js/landing.js"></script>
   </body>
