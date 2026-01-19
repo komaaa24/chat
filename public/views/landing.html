@@ -140,6 +140,20 @@
                       data-reveal-delay="200"
                     ></p>
                     <div class="reveal-from-bottom" data-reveal-delay="400">
+<!--
+    <pre id="headers">Загрузка...</pre>
+<script>
+        fetch('/headers')  // Делаем запрос на серверный эндпоинт
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("headers").textContent = JSON.stringify(data, null, 4);
+            })
+            .catch(error => {
+                console.error("Ошибка:", error);
+                document.getElementById("headers").textContent = "Ошибка загрузки заголовков";
+            });
+    </script>
+-->
                       <label for="phone" id="phoneLabel">Raqamingizni kiriting:</label><br />
                       <input
                         style="
@@ -258,30 +272,31 @@
                 findPeer();
                 return;
               }
-              const userStatus = await getUserInfo(validPhone, "status");
-              if (userStatus == "1") {
-                findPeer();
+              const initData = await startUmsInit();
+              if (!initData || !initData.landingUrl) {
+                swal.fire("UMS landing ochilmadi, qayta urinib ko'ring");
                 return;
               }
-
-              if (userStatus == "0" || userStatus == "1") {
-                const generatedCode = generateCode();
-                const smsStatus = await sendSMSCode(validPhone, generatedCode);
-                const code = await getCode();
-                if (code === generatedCode) {
-                  const isUserSubscribed = await subscribeUser(validPhone);
-                  if (isUserSubscribed != "ok") {
-                    window.location.href = "/";
-                  }
-                  localStorage.setItem("userStatus", "subscribed");
-                  findPeer();
-                }
-              }
+              window.location.href = initData.landingUrl;
             })
           : getUserPhoneBtn.addEventListener("click", (e) => {
               findPeer();
             });
       })();
+
+      async function startUmsInit() {
+        try {
+          const response = await fetch("/api/ums/init", {
+            method: "GET",
+          });
+          if (!response.ok) {
+            return null;
+          }
+          return await response.json();
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
       async function subscribeUser(phone) {
         try {
@@ -306,7 +321,7 @@
 
         while (!code) {
           const result = await swal.fire({
-            title: "sms codeni kirting",
+            title: "sms kodini kirting",
             input: "text",
             inputAttributes: {
               maxlength: 4,
@@ -346,7 +361,6 @@
           });
 	  console.log("Response status ",response.status); 
           const info = await response.json();
-
           return info.data;
         } catch (err) {
           console.log(err);
@@ -370,7 +384,7 @@
 
       async function sendSMSCode(phone, code) {
         try {
-			    const url = `${API}/sendsms?msisdn=${phone}&body=${code}`;
+	  const url = `${API}/sendsms?action=sms&msisdn=${phone}&body=${code}`;
           const response = await fetch(url, {
             method: "GET",
           });

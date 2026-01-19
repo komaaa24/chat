@@ -1,0 +1,400 @@
+nohup: ignoring input
+
+> videochat@1.0.1 start
+> node app/src/server.js
+
+[[36m2026-01-16 11:44:02.309[39m] [[33mserver[39m] Server is running...
+port 3001 [32m''[39m [35m+25ms[39m
+[]
+[
+  {
+    userId: 'd6c26791-228e-404e-921d-386da4dd2dee',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/bb4d2927-68e3-4414-88cc-77de78fd298d'
+  }
+]
+[[36m2026-01-16 11:47:43.156[39m] [[33msocket service[39m] [TqP-jdNOM6JPvTpLAAAB] connection accepted { host: [32m'localhost'[39m } [35m+3m[39m
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/bb4d2927-68e3-4414-88cc-77de78fd298d'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/bb4d2927-68e3-4414-88cc-77de78fd298d'
+  }
+]
+[[36m2026-01-16 11:48:02.816[39m] [[33msocket service[39m] Join room {
+  channel: [32m'bb4d2927-68e3-4414-88cc-77de78fd298d'[39m,
+  userAgent: [32m'mozilla/5.0 (x11; linux x86_64) applewebkit/537.36 (khtml, like gecko) chrome/142.0.0.0 safari/537.36'[39m,
+  channel_password: [1mnull[22m,
+  peer_info: {
+    detectRTCversion: [32m'1.4.1'[39m,
+    isWebRTCSupported: [33mtrue[39m,
+    isDesktopDevice: [33mtrue[39m,
+    isMobileDevice: [33mfalse[39m,
+    isTabletDevice: [33mfalse[39m,
+    isIPadDevice: [33mfalse[39m,
+    osName: [32m'Linux'[39m,
+    osVersion: [32m'-'[39m,
+    browserName: [32m'Chrome'[39m,
+    browserVersion: [33m142[39m
+  },
+  peer_geo: {
+    asn: [32m'AS8193'[39m,
+    asnName: [32m'BRM-AS'[39m,
+    asnOrg: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    businessName: [32m''[39m,
+    businessWebsite: [32m''[39m,
+    city: [32m'Tashkent'[39m,
+    continent: [32m'Asia'[39m,
+    country: [32m'Uzbekistan'[39m,
+    countryCode: [32m'UZ'[39m,
+    ipName: [32m''[39m,
+    ipType: [32m'Residential'[39m,
+    isp: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    lat: [32m'41.12778'[39m,
+    lon: [32m'70.10778'[39m,
+    message: [32m'Important: API Key required, please get your API Key at https://extreme-ip-lookup.com'[39m,
+    org: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    query: [32m'213.230.110.176'[39m,
+    region: [32m'Toshkent'[39m,
+    status: [32m'success'[39m,
+    timezone: [32m'Asia/Tashkent'[39m,
+    utcOffset: [32m'+05:00'[39m
+  },
+  peer_name: [32m'kamol'[39m,
+  peer_video: [33mtrue[39m,
+  peer_audio: [33mtrue[39m,
+  peer_video_status: [33mtrue[39m,
+  peer_audio_status: [33mtrue[39m,
+  peer_screen_status: [33mfalse[39m,
+  peer_hand_status: [33mfalse[39m,
+  peer_rec_status: [33mfalse[39m,
+  peer_privacy_status: [33mfalse[39m
+} [35m+19s[39m
+no available peers
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/bb4d2927-68e3-4414-88cc-77de78fd298d'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/9200780c-b648-4a14-9ad4-975187c87288'
+  }
+]
+[[36m2026-01-16 11:49:05.311[39m] [[33msocket service[39m] [31mRemove Peer[39m [32m'{}'[39m
+[[36m2026-01-16 11:49:05.312[39m] [[33msocket service[39m] [removePeerFrom] - connected peers grp by roomId {} [35m+1m[39m
+[[36m2026-01-16 11:49:05.313[39m] [[33msocket service[39m] [TqP-jdNOM6JPvTpLAAAB] disconnected { reason: [32m'transport close'[39m } [35m+1ms[39m
+[[36m2026-01-16 11:49:05.663[39m] [[33msocket service[39m] [nJQGbJDBOHanb89OAAAD] connection accepted { host: [32m'localhost'[39m } [35m+349ms[39m
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/9200780c-b648-4a14-9ad4-975187c87288'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/9200780c-b648-4a14-9ad4-975187c87288'
+  }
+]
+[[36m2026-01-16 11:49:06.025[39m] [[33msocket service[39m] Join room {
+  channel: [32m'9200780c-b648-4a14-9ad4-975187c87288'[39m,
+  userAgent: [32m'mozilla/5.0 (x11; linux x86_64) applewebkit/537.36 (khtml, like gecko) chrome/142.0.0.0 safari/537.36'[39m,
+  channel_password: [1mnull[22m,
+  peer_info: {
+    detectRTCversion: [32m'1.4.1'[39m,
+    isWebRTCSupported: [33mtrue[39m,
+    isDesktopDevice: [33mtrue[39m,
+    isMobileDevice: [33mfalse[39m,
+    isTabletDevice: [33mfalse[39m,
+    isIPadDevice: [33mfalse[39m,
+    osName: [32m'Linux'[39m,
+    osVersion: [32m'-'[39m,
+    browserName: [32m'Chrome'[39m,
+    browserVersion: [33m142[39m
+  },
+  peer_geo: {
+    asn: [32m'AS8193'[39m,
+    asnName: [32m'BRM-AS'[39m,
+    asnOrg: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    businessName: [32m''[39m,
+    businessWebsite: [32m''[39m,
+    city: [32m'Tashkent'[39m,
+    continent: [32m'Asia'[39m,
+    country: [32m'Uzbekistan'[39m,
+    countryCode: [32m'UZ'[39m,
+    ipName: [32m''[39m,
+    ipType: [32m'Residential'[39m,
+    isp: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    lat: [32m'41.12778'[39m,
+    lon: [32m'70.10778'[39m,
+    message: [32m'Important: API Key required, please get your API Key at https://extreme-ip-lookup.com'[39m,
+    org: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    query: [32m'213.230.110.176'[39m,
+    region: [32m'Toshkent'[39m,
+    status: [32m'success'[39m,
+    timezone: [32m'Asia/Tashkent'[39m,
+    utcOffset: [32m'+05:00'[39m
+  },
+  peer_name: [32m'kamol'[39m,
+  peer_video: [33mtrue[39m,
+  peer_audio: [33mtrue[39m,
+  peer_video_status: [33mtrue[39m,
+  peer_audio_status: [33mtrue[39m,
+  peer_screen_status: [33mfalse[39m,
+  peer_hand_status: [33mfalse[39m,
+  peer_rec_status: [33mfalse[39m,
+  peer_privacy_status: [33mfalse[39m
+} [35m+362ms[39m
+no available peers
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/9200780c-b648-4a14-9ad4-975187c87288'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/c1239055-9926-4778-a074-d5d3fbf64f4d'
+  }
+]
+[[36m2026-01-16 11:49:31.163[39m] [[33msocket service[39m] [31mRemove Peer[39m [32m'{}'[39m
+[[36m2026-01-16 11:49:31.164[39m] [[33msocket service[39m] [removePeerFrom] - connected peers grp by roomId {} [35m+25s[39m
+[[36m2026-01-16 11:49:31.165[39m] [[33msocket service[39m] [nJQGbJDBOHanb89OAAAD] disconnected { reason: [32m'transport close'[39m } [35m+1ms[39m
+[[36m2026-01-16 11:49:31.440[39m] [[33msocket service[39m] [BLVsUkWR5QXqctkXAAAF] connection accepted { host: [32m'localhost'[39m } [35m+275ms[39m
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/c1239055-9926-4778-a074-d5d3fbf64f4d'
+  }
+]
+[
+  {
+    userId: 'e38e09a8-7681-4151-9896-1968aa83adb8',
+    userStatus: 'free',
+    lastRoom: '/'
+  },
+  {
+    userId: 'bd762709-ab4b-4a1b-831a-830ccae05e2b',
+    userStatus: 'free',
+    lastRoom: '/join/c1239055-9926-4778-a074-d5d3fbf64f4d'
+  }
+]
+[[36m2026-01-16 11:49:31.813[39m] [[33msocket service[39m] Join room {
+  channel: [32m'c1239055-9926-4778-a074-d5d3fbf64f4d'[39m,
+  userAgent: [32m'mozilla/5.0 (x11; linux x86_64) applewebkit/537.36 (khtml, like gecko) chrome/142.0.0.0 safari/537.36'[39m,
+  channel_password: [1mnull[22m,
+  peer_info: {
+    detectRTCversion: [32m'1.4.1'[39m,
+    isWebRTCSupported: [33mtrue[39m,
+    isDesktopDevice: [33mtrue[39m,
+    isMobileDevice: [33mfalse[39m,
+    isTabletDevice: [33mfalse[39m,
+    isIPadDevice: [33mfalse[39m,
+    osName: [32m'Linux'[39m,
+    osVersion: [32m'-'[39m,
+    browserName: [32m'Chrome'[39m,
+    browserVersion: [33m142[39m
+  },
+  peer_geo: {
+    asn: [32m'AS8193'[39m,
+    asnName: [32m'BRM-AS'[39m,
+    asnOrg: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    businessName: [32m''[39m,
+    businessWebsite: [32m''[39m,
+    city: [32m'Tashkent'[39m,
+    continent: [32m'Asia'[39m,
+    country: [32m'Uzbekistan'[39m,
+    countryCode: [32m'UZ'[39m,
+    ipName: [32m''[39m,
+    ipType: [32m'Residential'[39m,
+    isp: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    lat: [32m'41.12778'[39m,
+    lon: [32m'70.10778'[39m,
+    message: [32m'Important: API Key required, please get your API Key at https://extreme-ip-lookup.com'[39m,
+    org: [32m'"Uzbektelekom" Joint Stock Company'[39m,
+    query: [32m'213.230.110.176'[39m,
+    region: [32m'Toshkent'[39m,
+    status: [32m'success'[39m,
+    timezone: [32m'Asia/Tashkent'[39m,
+    utcOffset: [32m'+05:00'[39m
+  },
+  peer_name: [32m'kamol'[39m,
+  peer_video: [33mtrue[39m,
+  peer_audio: [33mtrue[39m,
+  peer_video_status: [33mtrue[39m,
+  peer_audio_status: [33mtrue[39m,
+  peer_screen_status: [33mfalse[39m,
+  peer_hand_status: [33mfalse[39m,
+  peer_rec_status: [33mfalse[39m,
+  peer_privacy_status: [33mfalse[39m
+} [35m+373ms[39m
+[[36m2026-01-16 11:50:14.740[39m] [[33msocket service[39m] [removePeerFrom] - connected peers grp by roomId {} [35m+42s[39m
+[[36m2026-01-16 11:50:14.741[39m] [[33msocket service[39m] [BLVsUkWR5QXqctkXAAAF] disconnected { reason: [32m'transport close'[39m } [35m+0ms[39m
+Hangup

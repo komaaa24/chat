@@ -3,7 +3,7 @@ const Logs = require("./logs");
 const router = express.Router();
 const config = require("./config");
 const { canJoin, findFreePeer, getMeetingURL } = require("./utils");
-const { blockMiddleware } = require("./middlewares");
+const { blockMiddleware, trafficBackAllowlist } = require("./middlewares");
 const dotenv = require("dotenv");
 const path = require("path");
 const { default: axios } = require("axios");
@@ -11,11 +11,54 @@ const { default: axios } = require("axios");
 const ENV_PATH = path.resolve(__dirname, "../../.env");
 dotenv.config({ path: ENV_PATH });
 
-const smsURL = "http://81.95.228.2:8080/sms_send.php";
+const smsURL = "http://94.158.51.173:8080/sms_send.php";
 
 const log = new Logs("server");
 
 router.use(blockMiddleware);
+
+router.get("/api/ums/init", async (req, res, next) => {
+  const umsInitUrl = process.env.UMS_INIT_URL;
+  const umsToken = process.env.UMS_TOKEN;
+  const serviceId = process.env.UMS_SERVICE_ID;
+  const landingId = process.env.UMS_LANDING_ID;
+
+  if (!umsInitUrl || !umsToken || !serviceId || !landingId) {
+    return res.status(500).json({ error: "UMS config missing" });
+  }
+
+  try {
+    const response = await axios.get(umsInitUrl, {
+      params: {
+        service_id: serviceId,
+        landing_id: landingId,
+      },
+      headers: {
+        Authorization: umsToken,
+      },
+      timeout: 10000,
+    });
+
+    const { landingUrl, sid } = response.data || {};
+    if (!landingUrl || !sid) {
+      return res.status(502).json({ error: "Invalid UMS response" });
+    }
+
+    return res.json({ landingUrl, sid });
+  } catch (err) {
+    log.error("UMS init error", err?.message || err);
+    return res.status(502).json({ error: "UMS init failed" });
+  }
+});
+
+router.get("/traffikback", trafficBackAllowlist, (req, res, next) => {
+  res.status(200).json({
+    ok: true,
+    sid: req.query.sid || null,
+    requestSid: req.query.requestSid || null,
+    status: req.query.status || null,
+  });
+});
 
 router.get("/speaker", (req, res, next) => {
   return res.sendFile(config.views.speaker);

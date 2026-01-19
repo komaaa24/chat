@@ -68,10 +68,11 @@ app.use(blockMiddleware);
 
 app.use("/", require("./apiRoutes"));
 
-
-app.get("*", (req, res, next) => {
-  res.sendFile(config.views.notFound);
+/*
+app.get("/headers", (req, res) => {
+    res.json(req.headers);
 });
+*/
 
 /**
  * You should probably use a different stun-turn server
